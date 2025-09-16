@@ -97,7 +97,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   .title{margin:4px 0 8px 0;font-size:16pt}
   header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
 }
-</style>
+#view-calc2 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px;align-items:end;margin-bottom:12px}
+#view-calc2 .input-grid input.num{width:100%}
+#view-calc2 input.date{display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
+.deadline-box .label{font-size:.8rem;color:#374151}
+.deadline-box .value{font-size:1.05rem;font-weight:700}
+$1
 <style>
 /* PWA 모드에서는 CSS만으로도 숨김 처리 (추가 보강) */
 @media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
@@ -218,8 +224,16 @@ $1
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
-          <label for="취득가액">취득가액(매매가)</label>
-          <input id="취득가액" class="num" type="text" inputmode="numeric" placeholder="숫자만 입력" />
+          <div class="input-grid">
+            <div class="col col-amount">
+              <label for="취득가액">취득가액(매매가)</label>
+              <input id="취득가액" class="num" type="text" inputmode="numeric" placeholder="숫자만 입력" />
+            </div>
+            <div class="col col-date">
+              <label for="잔금지급일">잔금지급일</label>
+              <input id="잔금지급일" type="date" class="date" />
+            </div>
+          </div>
           <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc()">✍️ 계산하기</button></div>
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
@@ -231,7 +245,11 @@ $1
                 <tr><td>지방교육세</td><td>0.4%</td></tr>
               </tbody>
             </table>
-          </details>
+          $1
+          <div class="deadline-box center-30" style="margin-top:10px">
+            <div class="label">취득세 납부기한</div>
+            <div class="value" id="납부기한">-</div>
+          </div>
         </div>
         <div class="card">
           <h2>2. 산출 세액</h2>
@@ -273,7 +291,7 @@ window.addEventListener('load',()=>{
 </script>
 
 <script>
-// --- (요청 코드) 상가 등 유상취득 계산기 로직 ---
+// --- (요청 코드) 상가 등 유상취득 계산기 로직 + 납부기한(잔금지급일+60일) ---
 const $=id=>document.getElementById(id);
 const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v;}
 const setHTML=(id,v)=>{const el=$(id);if(el)el.innerHTML=v;}
@@ -281,9 +299,32 @@ const numOf=id=>Number((($(id)?.value)||'').replace(/,/g,'')||0);
 const floor10=n=>Math.floor(n/10)*10;
 const fmt=n=>(Number.isFinite(n)?Math.floor(n).toLocaleString('ko-KR')+'원':'-');
 const ACQ_RATE=0.04,NTS_RATE=0.002,EDU_RATE=0.004,TOTAL_RATE=ACQ_RATE+NTS_RATE+EDU_RATE;
+
+// 날짜 유틸
+const parseLocalDate=s=>{ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y, (m||1)-1, d||1); };
+const addDays=(date,days)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()+days); return d; };
+const formatYMD=d=>{ if(!d||Number.isNaN(+d)) return '-'; const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; };
+
 document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
-function calc(){const base=numOf('취득가액');const acq=floor10(base*ACQ_RATE),nts=floor10(base*NTS_RATE),edu=floor10(base*EDU_RATE);const sum=acq+nts+edu;const rows=[["취득세","4%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.4%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');setHTML('tb',rows);setText('sumY',fmt(sum));setText('sum_total',fmt(sum));setText('과표',fmt(base));
-  setText('sum_guide','취득(잔금지급일)일로부터 60일 내');}
+document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')){ calc(); }});
+
+function calc(){
+  const base=numOf('취득가액');
+  const acq=floor10(base*ACQ_RATE),nts=floor10(base*NTS_RATE),edu=floor10(base*EDU_RATE);
+  const sum=acq+nts+edu;
+  const rows=[["취득세","4%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.4%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  setHTML('tb',rows);setText('sumY',fmt(sum));setText('sum_total',fmt(sum));setText('과표',fmt(base));
+  setText('sum_guide','취득(잔금지급일)일로부터 60일 내');
+
+  // 납부기한 계산: 잔금지급일 + 60일
+  const payDateStr = $('잔금지급일')?.value || '';
+  let deadline='-';
+  if(payDateStr){
+    const d=parseLocalDate(payDateStr);
+    if(d){ deadline = formatYMD(addDays(d,60)); }
+  }
+  setText('납부기한', deadline);
+}
 function openPrint(){try{calc();setTimeout(()=>window.print(),0);}catch(e){window.print();}}
 </script>
 <script>
@@ -411,4 +452,4 @@ try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', 
 </script>
 $1
 </html>
-.
+
