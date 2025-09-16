@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>취득세 신고</title>
+<title>취득세 계산 · 메뉴</title>
 <meta name="theme-color" content="#2c58ff" />
 <link rel="manifest" href="manifest.webmanifest?v=20250916">
-<link rel="icon" href="./icon-192-v6.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="./icon-512-v6.png" />
+<link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
 :root{
   --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
@@ -51,7 +51,8 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .menu-note{font-size:.85rem;color:var(--text-sub)}
 
 /* 표/입력(2번 화면에서 사용) */
-$1
+
+.grid{display:grid;grid-template-columns:50% 50%;gap:20px}
 #view-calc2 .grid{grid-template-columns:1fr !important}
 #view-calc2 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -94,10 +95,10 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 </head>
 <body>
   <!-- 스플래시: 1.5초 후 자동 전환 -->
-  <div id="splash" role="status" aria-live="polite"><h1>취득세 신고</h1></div>
+  <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
 
   <!-- 메뉴 화면 -->
-  $1
+  
     <header class="appbar">
       <div class="row">
         <div class="brand"><span>취득유형 선택</span></div>
@@ -123,7 +124,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <div class="menu-num">2</div>
             <div>
               <div class="menu-text">상가(오피스텔) 매매 취득</div>
-              <div class="menu-note">계산기로 이동</div>
+              
             </div>
           </button>
           <button class="menu-item" onclick="showView('coming3')">
