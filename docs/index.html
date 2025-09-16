@@ -110,15 +110,22 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 /* ====== [추가] 상속 취득 체크박스 왼쪽 정렬 및 세부옵션 ====== */
 #view-calc3 .type-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:10px}
 #view-calc3 .type-options label{display:inline-flex;align-items:center;gap:6px;text-align:left !important}
-#view-calc3 .area-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin:6px 0 8px 0}
+/* area-options는 박스 2개를 세로로 쌓기 */
+#view-calc3 .area-options{display:flex;flex-direction:column;gap:10px;justify-content:flex-start;flex-wrap:nowrap;margin:6px 0 8px 0}
+#view-calc3 .area-options label{display:inline-flex;align-items:center;gap:6px}
 #view-calc3 .hint{font-size:.8rem;color:var(--muted);margin-top:2px;text-align:left}
-/* [강조] 요구 문구: 검은색, 굵게, 글씨 크기 +1 단계 */
+/* [강조] 문구 스타일 */
 #view-calc3 .type-options label span,
 #view-calc3 .area-options label span{
   color:var(--text);
   font-weight:800;
   font-size:1.05rem;
 }
+/* [신규] 체크박스 박스 스타일 (옅은 초록/하늘색 박스) */
+.pill{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.pill.green{background:#ecfdf5;border-color:#bbf7d0}
+.pill.sky{background:#e0f2fe;border-color:#bae6fd}
+.pill label{margin:2px 0}
 </style>
 </head>
 <body>
@@ -304,18 +311,25 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <!-- [수정] 유형 체크박스: 문구 변경 + 왼쪽 정렬 + 강조 스타일 -->
+          <!-- 유형 체크박스 -->
           <div class="type-options" id="typeOptions">
             <label><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
             <label><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
           </div>
 
-          <!-- [추가] 주택 선택 시 표시되는 전용면적 옵션 (문구에서 (체크박스) 제거 + 강조) -->
+          <!-- 전용면적(초록 박스) + 특례(하늘 박스) -->
           <div id="areaOptions" class="area-options hidden" aria-live="polite">
-            <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
-            <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
+            <div class="pill green" id="areaBox" role="group" aria-label="전용면적 선택">
+              <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
+              <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
+            </div>
+            <div class="pill sky" id="specialBox" role="group" aria-label="세율 특례 선택">
+              <label title="체크 시 취득세율 0.8% 적용 및 농어촌특별세 미부과">
+                <input type="checkbox" id="one_home_special" /> <span>1가구 1주택 세율 특례대상</span>
+              </label>
+            </div>
           </div>
-          <div id="areaHint" class="hint hidden">※ 주택만 선택한 경우에 전용면적을 선택하세요. 85m² 이하이면 농어촌특별세 미부과.</div>
+          <div id="areaHint" class="hint hidden"></div>
 
           <div class="input-grid">
             <div class="col col-amount">
@@ -333,7 +347,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <table class="table nowrap">
               <tbody>
                 <tr><td>과세표준</td><td id="상속_과표">-</td></tr>
-                <tr><td>취득세</td><td>2.8%</td></tr>
+                <tr><td>취득세</td><td id="상속_취득세율셀">2.8%</td></tr>
                 <tr><td>농어촌특별세</td><td id="상속_농특세율셀">0.2%</td></tr>
                 <tr><td>지방교육세</td><td>0.16%</td></tr>
               </tbody>
@@ -359,7 +373,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <table class="table">
             <thead><tr><th>세목</th><th>세율</th><th>세액</th></tr></thead>
             <tbody id="상속_tb"><tr><td colspan="3" style="text-align:center;color:#6b7280">입력 후 ‘계산하기’를 눌러주세요.</td></tr></tbody>
-            <tfoot><tr><th>합계 세액</th><th>3.16%</th><th id="상속_sumY">-</th></tr></tfoot>
+            <tfoot><tr><th>합계 세액</th><th id="상속_합계세율표시">3.16%</th><th id="상속_sumY">-</th></tr></tfoot>
           </table>
           <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
         </div>
@@ -424,23 +438,25 @@ document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지
 <script>
 // --- (3번) 상속 취득 계산기 로직 + 납부기한(사망일+6개월) ---
 // 기본 세율(주택/비주택 공통 기본)
-const I_ACQ_RATE=0.028, I_NTS_RATE=0.002, I_EDU_RATE=0.0016, I_TOTAL_RATE=I_ACQ_RATE+I_NTS_RATE+I_EDU_RATE; // 3.16%
+const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008; // 특례시 0.8%
+const I_NTS_RATE=0.002, I_EDU_RATE=0.0016; // 교육세 고정
 
 // 주택 선택 시 전용면적 옵션 표시/숨김, 상호배타 체크 처리
 function refreshAreaOptions(){
   const isHouse = $('isHouse')?.checked;
   const isNonHouse = $('isNonHouse')?.checked;
-  // 주택만 체크된 경우에만 전용면적 옵션 노출
+  // 주택만 체크된 경우에만 전용면적/특례 박스 노출
   const showArea = !!isHouse && !isNonHouse;
   const areaBox = $('areaOptions');
   const hint = $('areaHint');
   if(areaBox){ areaBox.classList.toggle('hidden', !showArea); }
   if(hint){ hint.classList.toggle('hidden', !showArea); }
-  // 주택 체크 해제하거나 비주택 체크 시 면적 선택 초기화
+  // 해제 시 선택 초기화
   if(!showArea){
-    const le = $('area_le_85'), gt = $('area_gt_85');
+    const le = $('area_le_85'), gt = $('area_gt_85'), sp=$('one_home_special');
     if(le) le.checked=false;
     if(gt) gt.checked=false;
+    if(sp) sp.checked=false;
   }
 }
 
@@ -452,6 +468,10 @@ function toggleArea(exclusiveId){
       const el=$(id); if(el) el.checked=false;
     }
   });
+  // 85m² 이하로 바꾸면 특례는 해제(조건 미충족)
+  if(exclusiveId==='area_le_85'){
+    const sp=$('one_home_special'); if(sp) sp.checked=false;
+  }
 }
 
 function calc3(){
@@ -460,36 +480,43 @@ function calc3(){
   const isNonHouse = $('isNonHouse')?.checked || false;
   const le85 = $('area_le_85')?.checked || false;
   const gt85 = $('area_gt_85')?.checked || false;
+  const special = $('one_home_special')?.checked || false;
 
-  // 농어촌특별세율 결정 로직
+  // 농어촌특별세율 기본 로직
   let ntsRate = I_NTS_RATE;
   let ntsRateLabel = '0.2%';
-  // 요청사항: 주택 + 전용면적 85m² 이하 선택 시 농특세 미부과
   if(isHouse && !isNonHouse){
     if(le85){
       ntsRate = 0;
       ntsRateLabel = '미부과';
-    }else if(gt85){
-      ntsRate = I_NTS_RATE;
-      ntsRateLabel = '0.2%';
     }else{
-      // 면적 미선택 시 기본 유지(0.2%)
       ntsRate = I_NTS_RATE;
       ntsRateLabel = '0.2%';
     }
   }else{
-    // 비주택 포함 시 기본(0.2%)
     ntsRate = I_NTS_RATE;
     ntsRateLabel = '0.2%';
   }
+  // [신규] 특례 체크 시 농특세 무조건 미부과
+  if(special){
+    ntsRate = 0;
+    ntsRateLabel = '미부과';
+  }
 
-  const acq=floor10(base*I_ACQ_RATE);
+  // 취득세율(기본 2.8%, 특례 체크 시 0.8%) — 특례는 주택만 & 85m² 초과 선택 시에만 적용
+  let acqRate = I_ACQ_RATE_DEFAULT;
+  if(isHouse && !isNonHouse && gt85 && special){
+    acqRate = I_ACQ_RATE_SPECIAL;
+  }
+  const acqRateLabel = (acqRate*100).toFixed(1) + '%';
+
+  const acq=floor10(base*acqRate);
   const nts=floor10(base*ntsRate);
   const edu=floor10(base*I_EDU_RATE);
   const sum=acq+nts+edu;
 
   const rows=[
-    ["취득세","2.8%",fmt(acq)],
+    ["취득세",acqRateLabel,fmt(acq)],
     ["농어촌특별세",ntsRateLabel,fmt(nts)],
     ["지방교육세","0.16%",fmt(edu)],
   ].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
@@ -497,8 +524,11 @@ function calc3(){
   setText('상속_sumY',fmt(sum));
   setText('상속_sum_total',fmt(sum));
   setText('상속_과표',fmt(base));
-  // 표의 세율 셀도 동기화
   setText('상속_농특세율셀', ntsRateLabel);
+  setText('상속_취득세율셀', acqRateLabel);
+  // 합계 세율 표시 동기화
+  const totalRatePct = ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%';
+  setText('상속_합계세율표시', totalRatePct);
 
   setText('상속_sum_guide','사망일(상속개시일)로부터 6개월 내');
 
@@ -522,6 +552,9 @@ document.addEventListener('change',e=>{
   }
   if(id==='area_gt_85'){
     if(e.target.checked) toggleArea('area_gt_85');
+    calc3();
+  }
+  if(id==='one_home_special'){
     calc3();
   }
 });
