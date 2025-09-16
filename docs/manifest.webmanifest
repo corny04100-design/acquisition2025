@@ -1,0 +1,20 @@
+{
+  "name": "2025년 취득세 계산(상가 등 유상취득)",
+  "short_name": "취득세 계산",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2c58ff",
+  "icons": [
+    {
+      "src": "icon-192-v5.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512-v5.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
