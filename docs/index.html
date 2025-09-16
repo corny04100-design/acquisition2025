@@ -44,7 +44,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .warn{color:var(--warn);font-size:0.85rem;margin-top:10px;text-align:right}
 .sum-box .label{font-size:0.78rem;color:#374151}
 .sum-box .value{font-size:1.125rem}
-.sum-box .value.note{font-size:0.75rem} /* ← 글자 3단계 축소 */
+.sum-box .value.note{font-size:0.75rem}
 .nowrap{white-space:nowrap}
 .center-30{width:60%;min-width:420px;max-width:680px;margin:16px auto 0 auto}
 .nowrap td,.nowrap th{white-space:nowrap}
@@ -75,6 +75,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   <div class="row">
     <div class="brand"><span class="logo">🏛️</span><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
     <div class="app-actions">
+      <!-- 인쇄/저장 아이콘 -->
       <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="인쇄 미리보기" aria-label="인쇄">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M7 8V4h10v4M6 17H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M7 14h10v6H7zM17 11h.01"/></svg>
       </a>
@@ -86,11 +87,21 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <line x1="6" y1="16.5" x2="18" y2="16.5" class="icon-stroke"/>
         </svg>
       </a>
-      <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
-      <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
+      <!-- 링크 -->
+      <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95" rel="noopener">🔍 지방세법</a>
+      <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do" rel="noopener">🧾 위택스</a>
+      <!-- ✅ 앱 설치 아이콘 (위택스 오른쪽) -->
+      <a id="btnInstall" class="icon-btn icon-only" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">
+        <!-- Install/Download icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path class="icon-stroke" d="M12 3v10m0 0l4-4m-4 4l-4-4"/>
+          <path class="icon-stroke" d="M5 13v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5"/>
+        </svg>
+      </a>
     </div>
   </div>
 </header>
+
 <div class="wrap">
   <div class="title">2025년 취득세 계산(상가 등 유상취득)</div>
   <div class="grid">
@@ -132,18 +143,97 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 </div>
+
 <script>
+/* Helpers */
 const $=id=>document.getElementById(id);
 const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v;}
 const setHTML=(id,v)=>{const el=$(id);if(el)el.innerHTML=v;}
 const numOf=id=>Number((($(id)?.value)||'').replace(/,/g,'')||0);
 const floor10=n=>Math.floor(n/10)*10;
 const fmt=n=>(Number.isFinite(n)?Math.floor(n).toLocaleString('ko-KR')+'원':'-');
-const ACQ_RATE=0.04,NTS_RATE=0.002,EDU_RATE=0.004,TOTAL_RATE=ACQ_RATE+NTS_RATE+EDU_RATE;
-document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
-function calc(){const base=numOf('취득가액');const acq=floor10(base*ACQ_RATE),nts=floor10(base*NTS_RATE),edu=floor10(base*EDU_RATE);const sum=acq+nts+edu;const rows=[['취득세','4%',fmt(acq)],['농어촌특별세','0.2%',fmt(nts)],['지방교육세','0.4%',fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');setHTML('tb',rows);setText('sumY',fmt(sum));setText('sum_total',fmt(sum));setText('과표',fmt(base));
-  setText('sum_guide','취득(잔금지급일)일로부터 60일 내');}
-function openPrint(){try{calc();setTimeout(()=>window.print(),0);}catch(e){window.print();}}
+
+/* Rates */
+const ACQ_RATE=0.04,NTS_RATE=0.002,EDU_RATE=0.004;
+
+/* Auto comma */
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('num')){
+    let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');
+    if(v===''){e.target.value='';return;}
+    e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  }
+});
+
+/* Calc */
+function calc(){
+  const base=numOf('취득가액')||0;
+  const acq=floor10(base*ACQ_RATE);
+  const nts=floor10(base*NTS_RATE);
+  const edu=floor10(base*EDU_RATE);
+  const sum=acq+nts+edu;
+
+  const rows=[
+    ['취득세','4%',fmt(acq)],
+    ['농어촌특별세','0.2%',fmt(nts)],
+    ['지방교육세','0.4%',fmt(edu)]
+  ].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  setHTML('tb',rows);
+
+  setText('sumY',fmt(sum));
+  setText('sum_total',fmt(sum));
+  setText('과표',fmt(base));
+  setText('sum_guide','취득(잔금지급일)일로부터 60일 내');
+}
+
+/* Print */
+function openPrint(){
+  try{ calc(); setTimeout(()=>window.print(),0); }
+  catch(e){ window.print(); }
+}
+
+/* ✅ PWA 설치 처리 */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  // 버튼은 항상 표시하지만, 이벤트가 오면 정상 동작하도록 보장
+});
+
+async function openInstall(){
+  try{
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt=null;
+      return;
+    }
+    // Fallback 안내 (설치 이벤트가 없는 브라우저)
+    alert('브라우저 메뉴에서 "앱 설치" 또는 "홈 화면에 추가"를 선택해 주세요.');
+  }catch(e){}
+}
+
+/* ✅ 서비스워커 등록(설치 요건 충족) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./service-worker.js').then((reg)=>{
+      if(reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+      reg.addEventListener('updatefound',()=>{
+        const sw=reg.installing;
+        if(!sw) return;
+        sw.addEventListener('statechange',()=>{
+          if(sw.state==='installed' && navigator.serviceWorker.controller){
+            sw.postMessage('SKIP_WAITING');
+          }
+        });
+      });
+      let refreshing=false;
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(refreshing) return; refreshing=true; window.location.reload();
+      });
+    }).catch(console.error);
+  });
+}
 </script>
 </body>
 </html>
