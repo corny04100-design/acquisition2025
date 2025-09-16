@@ -29,6 +29,8 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .icon-btn.icon-only{width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .icon-btn.icon-only svg{width:20px;height:20px}
 .icon-stroke{fill:none;stroke:#1f2937;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* 앱 설치 상태에서는 앱설치 버튼 완전 숨김 */
+.installed .btn-install{display:none !important}
 
 /* 공통 레이아웃 */
 .wrap{max-width:960px;margin:20px auto 80px;padding:0 16px}
@@ -109,7 +111,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
-          <a class="icon-btn" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
+          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
         </div>
       </div>
     </header>
@@ -201,7 +203,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           </a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
-          <a id="btnInstall" class="icon-btn" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
+          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
         </div>
       </div>
     </header>
@@ -279,23 +281,68 @@ function calc(){const base=numOf('취득가액');const acq=floor10(base*ACQ_RATE
 function openPrint(){try{calc();setTimeout(()=>window.print(),0);}catch(e){window.print();}}
 </script>
 <script>
-// --- PWA 설치 관련 ---
+// --- PWA 설치 관련 · 견고한 설치 감지/숨김 ---
 let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;});
+
+function isStandalone(){
+  try{
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.matchMedia('(display-mode: window-controls-overlay)').matches
+      || window.navigator.standalone === true; // iOS
+  }catch(e){ return false; }
+}
+function setInstallButtonsVisible(visible){
+  document.querySelectorAll('.btn-install').forEach(el=>{ el.style.display = visible ? '' : 'none'; });
+  document.body.classList.toggle('installed', !visible);
+}
+function updateInstallUI(){
+  const installed = isStandalone();
+  setInstallButtonsVisible(!installed);
+}
+// 초기 즉시 반영 (DOM 준비 전에도 body 클래스 토글 가능)
+updateInstallUI();
+
+// 설치 가능 프롬프트 포착
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  updateInstallUI();
+});
+
+// 설치 완료 이벤트
+window.addEventListener('appinstalled', ()=>{
+  deferredPrompt=null;
+  updateInstallUI();
+});
+
+// 화면 재진입/표시 상태 변동 시 재평가
+['visibilitychange','pageshow'].forEach(evt=>{
+  window.addEventListener(evt, updateInstallUI);
+});
+
+// display-mode 변화 감지 (지원 브라우저)
+try{
+  const mq = window.matchMedia('(display-mode: standalone)');
+  mq.addEventListener?.('change', updateInstallUI);
+}catch(e){}
+
 function openInstall(){
   try{
     if(deferredPrompt){
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(()=>{deferredPrompt=null;});
-    }else{
+      deferredPrompt.userChoice.finally(()=>{deferredPrompt=null; updateInstallUI();});
+    }else if(!isStandalone()){
       alert('브라우저 메뉴에서 "앱 설치" 또는 "홈 화면에 추가"를 선택해 주세요.');
     }
   }catch(e){}
 }
+
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error).finally(updateInstallUI);
   });
+}else{
+  window.addEventListener('load', updateInstallUI);
 }
 </script>
 </body>
