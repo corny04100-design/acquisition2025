@@ -66,7 +66,8 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 h2{font-size:1.05rem;margin:0}
 h2 .unit{font-size:0.75rem;color:var(--text-sub)}
 label{font-size:0.9rem;color:var(--text-sub);margin-bottom:4px;display:block}
-input.num{width:50%;display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:var(--input-bg);text-align:right;font-size:1rem}
+/* [수정] 숫자 입력 공통: 70%로 축소 */
+input.num{width:70%;display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:var(--input-bg);text-align:right;font-size:1rem}
 .table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.9rem}
 .table th,.table td{padding:10px;border-bottom:1px solid var(--line)}
 .table th{text-align:center;background:var(--bg)}
@@ -99,7 +100,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
 }
 #view-calc2 .input-grid, #view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px;align-items:end;margin-bottom:12px}
-#view-calc2 .input-grid input.num, #view-calc3 .input-grid input.num{width:100%}
+/* [수정] 개별 화면에서도 숫자 입력 70% 유지 */
+#view-calc2 .input-grid input.num, #view-calc3 .input-grid input.num{width:70%}
 #view-calc2 input.date, #view-calc3 input.date{display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
 .deadline-box .label{font-size:.8rem;color:#374151}
@@ -112,6 +114,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 
 /* ====== 상속 취득 체크박스 + 박스 스타일 ====== */
 #view-calc3 .type-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:10px}
+/* [신규] 흰색 배경 박스 래핑 */
+#view-calc3 .type-options.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 #view-calc3 .type-options label{display:inline-flex;align-items:center;gap:6px;text-align:left !important}
 #view-calc3 .area-options{display:flex;flex-direction:column;gap:10px;justify-content:flex-start;flex-wrap:nowrap;margin:6px 0 8px 0}
 #view-calc3 .area-options label{display:inline-flex;align-items:center;gap:6px}
@@ -314,8 +318,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <!-- 유형 체크박스 -->
-          <div class="type-options" id="typeOptions">
+          <!-- 유형 체크박스 [신규: 박스 래핑 + 단일 선택] -->
+          <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택">
             <label><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
             <label><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
           </div>
@@ -443,12 +447,21 @@ document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지
 const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008; // 특례시 0.8%
 const I_NTS_RATE=0.002, I_EDU_RATE=0.0016; // 교육세 고정
 
+// [신규] 유형 단일선택(체크박스 상태에서 상호배타)
+function enforceTypeExclusive(changedId){
+  const a=$('isHouse'), b=$('isNonHouse');
+  if(changedId==='isHouse' && a?.checked){ if(b) b.checked=false; }
+  if(changedId==='isNonHouse' && b?.checked){ if(a) a.checked=false; }
+}
+
 // 주택 선택 시 전용면적 옵션 표시/숨김, 상호배타 체크 처리
 function refreshAreaOptions(){
   const isHouse = $('isHouse')?.checked;
   const isNonHouse = $('isNonHouse')?.checked;
+  // 둘 다 체크된 경우 보정: 비주택 해제
+  if(isHouse && isNonHouse){ $('isNonHouse').checked=false; }
   // 주택만 체크된 경우에만 전용면적/특례 박스 노출
-  const showArea = !!isHouse && !isNonHouse;
+  const showArea = !!$('isHouse')?.checked && !$('isNonHouse')?.checked;
   const areaBox = $('areaOptions');
   if(areaBox){ areaBox.classList.toggle('hidden', !showArea); }
   // 해제 시 선택 초기화
@@ -543,6 +556,7 @@ document.addEventListener('change',e=>{
   const id = e.target?.id || '';
   if(id==='사망일'){ calc3(); }
   if(id==='isHouse' || id==='isNonHouse'){
+    enforceTypeExclusive(id);
     refreshAreaOptions();
     calc3();
   }
@@ -560,7 +574,7 @@ document.addEventListener('change',e=>{
 });
 
 // 초기 표시 상태 동기화
-document.addEventListener('DOMContentLoaded', refreshAreaOptions);
+document.addEventListener('DOMContentLoaded', ()=>{ refreshAreaOptions(); });
 
 function openPrint(){ try{ calc2(); calc3(); setTimeout(()=>window.print(),0);}catch(e){ window.print(); } }
 </script>
