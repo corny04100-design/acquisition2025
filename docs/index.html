@@ -46,6 +46,10 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .menu-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .menu-item{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 12px var(--shadow);cursor:pointer;text-decoration:none;color:inherit}
 .menu-item:hover{background:#f8fafc}
+/* 2번(준비 완료) 강조 스타일 */
+.menu-item.ready{background:#fef2f2;border-color:#fecaca}
+.menu-item.ready .menu-num{background:#fee2e2}
+.menu-item.ready:hover{background:#fee2e2} 
 .menu-num{min-width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--brand-weak);font-weight:800}
 .menu-text{font-size:1.05rem;font-weight:700}
 .menu-note{font-size:.85rem;color:var(--text-sub)}
@@ -120,7 +124,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <div class="menu-note">준비 중</div>
             </div>
           </button>
-          <button class="menu-item" onclick="showView('calc2')">
+          <button class="menu-item ready" onclick="showView('calc2')">
             <div class="menu-num">2</div>
             <div>
               <div class="menu-text">상가(오피스텔) 매매 취득</div>
