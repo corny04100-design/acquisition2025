@@ -22,7 +22,7 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
 header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:0.95rem;white-space:nowrap}
-.brand .logo{font-size:16px}
+.brand .logo{display:none}
 .app-actions{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap}
 .icon-btn{padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--brand-weak);font-size:0.78rem;font-weight:700;color:var(--text);text-decoration:none;transition:background .15s;white-space:nowrap}
 .icon-btn:hover{background:#dbeafe}
@@ -51,6 +51,7 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .menu-note{font-size:.85rem;color:var(--text-sub)}
 
 /* 표/입력(2번 화면에서 사용) */
+$1
 #view-calc2 .grid{grid-template-columns:1fr !important}
 #view-calc2 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -99,7 +100,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   $1
     <header class="appbar">
       <div class="row">
-        <div class="brand"><span class="logo">🏛️</span><span>취득유형 선택</span></div>
+        <div class="brand"><span>취득유형 선택</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
@@ -180,7 +181,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span class="logo">🏛️</span><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
+        <div class="brand"><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
         <div class="app-actions">
           <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="인쇄 미리보기" aria-label="인쇄">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M7 8V4h10v4M6 17H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M7 14h10v6H7zM17 11h.01"/></svg>
