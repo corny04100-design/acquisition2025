@@ -6,8 +6,8 @@
 <title>취득세 계산 · 메뉴</title>
 <meta name="theme-color" content="#2c58ff" />
 <link rel="manifest" href="manifest.webmanifest?v=20250916">
-<link rel="icon" href="./icon-192-v6.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="./icon-512-v6.png" />
+<link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
 :root{
   --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
@@ -98,7 +98,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
 }
 </style>
-</head>
+<style>
+/* PWA 모드에서는 CSS만으로도 숨김 처리 (추가 보강) */
+@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
+  .btn-install{display:none !important}
+}
+</style>
+$1
 <body>
   <!-- 스플래시: 1.5초 후 자동 전환 -->
   <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
@@ -281,7 +287,7 @@ function calc(){const base=numOf('취득가액');const acq=floor10(base*ACQ_RATE
 function openPrint(){try{calc();setTimeout(()=>window.print(),0);}catch(e){window.print();}}
 </script>
 <script>
-// --- PWA 설치 관련 · 견고한 설치 감지/숨김 ---
+// --- PWA 설치 로직 (설치 가능/불가 모두 동작 + 설치 후 자동 숨김) ---
 let deferredPrompt=null;
 
 function isStandalone(){
@@ -299,52 +305,110 @@ function updateInstallUI(){
   const installed = isStandalone();
   setInstallButtonsVisible(!installed);
 }
-// 초기 즉시 반영 (DOM 준비 전에도 body 클래스 토글 가능)
-updateInstallUI();
 
-// 설치 가능 프롬프트 포착
+// iOS Safari 감지 (프롬프트 미지원)
+const isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+// 설치 가능 프롬프트 수신
 window.addEventListener('beforeinstallprompt',(e)=>{
   e.preventDefault();
   deferredPrompt=e;
+  // 설치 가능 조건 충족 → 설치 버튼 보이기 (이미 설치된 경우는 숨김 유지)
   updateInstallUI();
 });
 
-// 설치 완료 이벤트
+// 설치 완료 시 버튼 숨김 + 새로고침으로 상태 반영
 window.addEventListener('appinstalled', ()=>{
   deferredPrompt=null;
-  updateInstallUI();
+  setInstallButtonsVisible(false);
+  setTimeout(()=>{ try{ location.reload(); }catch(e){} }, 300);
 });
 
-// 화면 재진입/표시 상태 변동 시 재평가
-['visibilitychange','pageshow'].forEach(evt=>{
+async function openInstall(){
+  try{
+    if(isStandalone()){
+      setInstallButtonsVisible(false);
+      return;
+    }
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice.catch(()=>null);
+      deferredPrompt=null;
+      // 사용자가 승인하면 곧 appinstalled 이벤트가 옴
+      if(!choice || choice.outcome!=='accepted'){
+        // 거절 시에도 버튼은 유지
+        updateInstallUI();
+      }
+      return;
+    }
+    // 프롬프트 미지원/아직 준비 전 → 환경별 설치 안내
+    if(isiOS && isSafari){
+      alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.');
+    }else{
+      alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요.');
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+
+// 페이지 진입/표시 때마다 상태 재평가
+['load','pageshow','visibilitychange'].forEach(evt=>{
   window.addEventListener(evt, updateInstallUI);
 });
 
 // display-mode 변화 감지 (지원 브라우저)
-try{
-  const mq = window.matchMedia('(display-mode: standalone)');
-  mq.addEventListener?.('change', updateInstallUI);
-}catch(e){}
-
-function openInstall(){
-  try{
-    if(deferredPrompt){
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(()=>{deferredPrompt=null; updateInstallUI();});
-    }else if(!isStandalone()){
-      alert('브라우저 메뉴에서 "앱 설치" 또는 "홈 화면에 추가"를 선택해 주세요.');
-    }
-  }catch(e){}
-}
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error).finally(updateInstallUI);
-  });
-}else{
-  window.addEventListener('load', updateInstallUI);
-}
+try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', updateInstallUI); }catch(e){}
 </script>
-</body>
+<script>
+// [보강 스크립트] 설치 후에도 버튼이 남는 경우 강제 숨김 처리
+(function(){
+  const LS_KEY='pwaInstalled';
+  function isStandalone(){
+    try{
+      return window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: window-controls-overlay)').matches
+        || window.navigator.standalone === true; // iOS
+    }catch(e){ return false; }
+  }
+  function hideInstallButtons(){
+    document.querySelectorAll('.btn-install').forEach(el=>{ el.style.display='none'; });
+    document.body.classList.add('installed');
+  }
+  function update(){
+    if(isStandalone() || localStorage.getItem(LS_KEY)==='1'){
+      hideInstallButtons();
+    }
+  }
+  // 초기/이벤트 훅
+  update();
+  document.addEventListener('DOMContentLoaded', update);
+  window.addEventListener('pageshow', update);
+  window.addEventListener('visibilitychange', update);
+  try{
+    const mq1 = window.matchMedia('(display-mode: standalone)');
+    mq1.addEventListener?.('change', update);
+    const mq2 = window.matchMedia('(display-mode: window-controls-overlay)');
+    mq2.addEventListener?.('change', update);
+  }catch(e){}
+  window.addEventListener('appinstalled', ()=>{ localStorage.setItem(LS_KEY,'1'); update(); });
+  // install 버튼 클릭 후 accept 시에도 즉시 숨김
+  const _openInstall = window.openInstall;
+  window.openInstall = function(){
+    try{
+      if(typeof _openInstall === 'function'){
+        const ret = _openInstall();
+        try{
+          // deferredPrompt.userChoice.then(...) 내부에서 처리되지 않는 브라우저 대비
+          setTimeout(update, 1000);
+        }catch(e){}
+        return ret;
+      }
+    }catch(e){}
+  };
+})();
+</script>
+$1
 </html>
 .
