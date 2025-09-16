@@ -10,14 +10,13 @@
 <link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
 :root{
---bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
---brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
---input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
---warn:#dc2626; --muted:#9ca3af;
+  --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
+  --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
+  --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
+  --warn:#dc2626; --muted:#9ca3af;
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.65}
 .hidden{display:none !important}
-
 
 /* 공통 헤더 */
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
@@ -32,7 +31,6 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .icon-stroke{fill:none;stroke:#1f2937;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .installed .btn-install{display:none !important}
 
-
 /* 공통 레이아웃 */
 .wrap{max-width:960px;margin:20px auto 80px;padding:0 16px}
 .title{font-size:1.3rem;font-weight:800;margin-bottom:10px;text-align:center}
@@ -40,11 +38,9 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
 .btn:hover{filter:brightness(1.05)}
 
-
 /* 스플래시 */
 #splash{position:fixed;inset:0;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;color:#fff;z-index:100}
 #splash h1{font-size:2rem;letter-spacing:.08em}
-
 
 /* 메뉴 */
 #view-menu .menu-wrap{max-width:640px;margin:0 auto}
@@ -54,11 +50,10 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 /* 2번(준비 완료) 강조 스타일 */
 .menu-item.ready{background:#fef2f2;border-color:#fecaca}
 .menu-item.ready .menu-num{background:#fee2e2}
-.menu-item.ready:hover{background:#fee2e2}
+.menu-item.ready:hover{background:#fee2e2} 
 .menu-num{min-width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--brand-weak);font-weight:800}
 .menu-text{font-size:1.05rem;font-weight:700}
 .menu-note{font-size:.85rem;color:var(--text-sub)}
-
 
 /* 표/입력(2/3번 화면에서 사용) */
 .grid{display:grid;grid-template-columns:50% 50%;gap:20px}
@@ -82,10 +77,56 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .sum-box .value.note{font-size:0.75rem}
 .nowrap{white-space:nowrap}
 .center-30{width:60%;min-width:420px;max-width:680px;margin:16px auto 0 auto}
-<div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
+.nowrap td,.nowrap th{white-space:nowrap}
+/* 모든 한글 문구 중앙 정렬 */
+.title,.brand,.header-row h2,label,summary,.warn,.sum-box .label,.sum-box .value{ text-align:center; }
+.table tfoot th:nth-child(2), .table tfoot th:nth-child(3){text-align:right}
+
+/* 인쇄 최적화 */
+@media print{
+  @page{size:A4 portrait;margin:10mm}
+  body{font-size:11pt}
+  .wrap{max-width:100%;margin:0;padding:0}
+  .grid{grid-template-columns:1fr 1fr;gap:8px}
+  .card{padding:10px;box-shadow:none;border-color:#e5e7eb}
+  .sum-box{margin:6px 0;padding:10px}
+  .table{font-size:10pt}
+  .table th,.table td{padding:6px}
+  .title{margin:4px 0 8px 0;font-size:16pt}
+  header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
+}
+#view-calc2 .input-grid, #view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px;align-items:end;margin-bottom:12px}
+#view-calc2 .input-grid input.num, #view-calc3 .input-grid input.num{width:100%}
+#view-calc2 input.date, #view-calc3 input.date{display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
+.deadline-box .label{font-size:.8rem;color:#374151}
+.deadline-box .value{font-size:1.05rem;font-weight:700}
+
+/* PWA 모드에서는 CSS만으로도 숨김 처리 (추가 보강) */
+@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
+  .btn-install{display:none !important}
+}
+
+/* ====== [추가] 상속 취득 체크박스 왼쪽 정렬 및 세부옵션 ====== */
+#view-calc3 .type-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:10px}
+#view-calc3 .type-options label{display:inline-flex;align-items:center;gap:6px;text-align:left !important}
+#view-calc3 .area-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin:6px 0 8px 0}
+#view-calc3 .hint{font-size:.8rem;color:var(--muted);margin-top:2px;text-align:left}
+/* [강조] 요구 문구: 검은색, 굵게, 글씨 크기 +1 단계 */
+#view-calc3 .type-options label span,
+#view-calc3 .area-options label span{
+  color:var(--text);
+  font-weight:800;
+  font-size:1.05rem;
+}
+</style>
+</head>
+<body>
+  <!-- 스플래시: 1.5초 후 자동 전환 -->
+  <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
 
   <!-- 메뉴 화면 -->
-  
+  <div id="view-menu" class="view">
     <header class="appbar">
       <div class="row">
         <div class="brand"><span>취득유형 선택</span></div>
@@ -111,14 +152,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <div class="menu-num">2</div>
             <div>
               <div class="menu-text">상가(오피스텔) 매매 취득</div>
-              
             </div>
           </button>
-          <button class="menu-item" onclick="showView('coming3')">
+          <button class="menu-item ready" onclick="showView('calc3')">
             <div class="menu-num">3</div>
             <div>
               <div class="menu-text">상속 취득</div>
-              <div class="menu-note">준비 중</div>
             </div>
           </button>
           <button class="menu-item" onclick="showView('coming4')">
@@ -133,20 +172,11 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 1/3/4 번: 준비 중 화면들 -->
+  <!-- 1/4 번: 준비 중 화면들 -->
   <div id="view-coming1" class="view hidden">
     <div class="wrap">
       <div class="card" style="text-align:center">
         <div class="title">주택 매매 취득</div>
-        <p style="color:var(--text-sub)">이 기능은 준비 중입니다.</p>
-        <button class="btn" onclick="showView('menu')">← 메뉴로</button>
-      </div>
-    </div>
-  </div>
-  <div id="view-coming3" class="view hidden">
-    <div class="wrap">
-      <div class="card" style="text-align:center">
-        <div class="title">상속 취득</div>
         <p style="color:var(--text-sub)">이 기능은 준비 중입니다.</p>
         <button class="btn" onclick="showView('menu')">← 메뉴로</button>
       </div>
@@ -162,7 +192,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 2번: 상가(오피스텔) 매매 취득 계산기 (요청 코드 그대로 이식) -->
+  <!-- 2번: 상가(오피스텔) 매매 취득 계산기 -->
   <div id="view-calc2" class="view hidden" aria-labelledby="calc2-heading">
     <header class="appbar">
       <div class="row">
@@ -203,7 +233,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <input id="잔금지급일" type="date" class="date" />
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc()">✍️ 계산하기</button></div>
+          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc2()">✍️ 계산하기</button></div>
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
             <table class="table nowrap">
@@ -242,6 +272,101 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
+  <!-- 3번: 상속 취득 계산기 -->
+  <div id="view-calc3" class="view hidden" aria-labelledby="calc3-heading">
+    <header class="appbar">
+      <div class="row">
+        <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div class="brand"><span>2025년 취득세 계산(상속 취득)</span></div>
+        <div class="app-actions">
+          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="인쇄 미리보기" aria-label="인쇄">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M7 8V4h10v4M6 17H5a 2 2 0 0 1-2-2v-3a 2 2 0 0 1 2-2h14a 2 2 0 0 1 2 2v3a 2 2 0 0 1-2 2h-1M7 14h10v6H7zM17 11h.01"/></svg>
+          </a>
+          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="PDF로 저장" aria-label="PDF 저장">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="2" class="icon-stroke"/>
+              <rect x="6" y="5.5" width="9" height="6" class="icon-stroke"/>
+              <rect x="17" y="6.5" width="3" height="3" fill="#1f2937"/>
+              <line x1="6" y1="16.5" x2="18" y2="16.5" class="icon-stroke"/>
+            </svg>
+          </a>
+          <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
+          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
+        </div>
+      </div>
+    </header>
+    <div class="wrap">
+      <h1 id="calc3-heading" class="title">2025년 취득세 계산(상속 취득)</h1>
+      <div class="grid">
+        <div class="card">
+          <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
+
+          <!-- [수정] 유형 체크박스: 문구 변경 + 왼쪽 정렬 + 강조 스타일 -->
+          <div class="type-options" id="typeOptions">
+            <label><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
+            <label><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
+          </div>
+
+          <!-- [추가] 주택 선택 시 표시되는 전용면적 옵션 (문구에서 (체크박스) 제거 + 강조) -->
+          <div id="areaOptions" class="area-options hidden" aria-live="polite">
+            <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
+            <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
+          </div>
+          <div id="areaHint" class="hint hidden">※ 주택만 선택한 경우에 전용면적을 선택하세요. 85m² 이하이면 농어촌특별세 미부과.</div>
+
+          <div class="input-grid">
+            <div class="col col-amount">
+              <label for="상속_과세표준">과세표준(주택공시가격 또는 건물·토지 시가표준액)</label>
+              <input id="상속_과세표준" class="num" type="text" inputmode="numeric" placeholder="숫자만 입력" />
+            </div>
+            <div class="col col-date">
+              <label for="사망일">사망일(상속개시일)</label>
+              <input id="사망일" type="date" class="date" />
+            </div>
+          </div>
+          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc3()">✍️ 계산하기</button></div>
+          <details class="center-30" style="margin-top:16px" open>
+            <summary>세율 및 과세표준</summary>
+            <table class="table nowrap">
+              <tbody>
+                <tr><td>과세표준</td><td id="상속_과표">-</td></tr>
+                <tr><td>취득세</td><td>2.8%</td></tr>
+                <tr><td>농어촌특별세</td><td id="상속_농특세율셀">0.2%</td></tr>
+                <tr><td>지방교육세</td><td>0.16%</td></tr>
+              </tbody>
+            </table>
+            <div class="deadline-box center-30" style="margin-top:10px">
+              <div class="label">취득세 납부기한</div>
+              <div class="value" id="상속_납부기한">-</div>
+            </div>
+          </details>
+        </div>
+        <div class="card">
+          <h2>2. 산출 세액</h2>
+          <div class="sum-box" role="status" aria-live="polite">
+            <div>
+              <div class="label">총 합계 세액</div>
+              <div class="value" id="상속_sum_total">-</div>
+            </div>
+            <div>
+              <div class="label">납부 안내</div>
+              <div class="value note nowrap" id="상속_sum_guide">사망일(상속개시일)로부터 6개월 내</div>
+            </div>
+          </div>
+          <table class="table">
+            <thead><tr><th>세목</th><th>세율</th><th>세액</th></tr></thead>
+            <tbody id="상속_tb"><tr><td colspan="3" style="text-align:center;color:#6b7280">입력 후 ‘계산하기’를 눌러주세요.</td></tr></tbody>
+            <tfoot><tr><th>합계 세액</th><th>3.16%</th><th id="상속_sumY">-</th></tr></tfoot>
+          </table>
+          <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
 // --- 뷰 전환 & 스플래시 ---
 function showView(name){
@@ -259,42 +384,154 @@ window.addEventListener('load',()=>{
 </script>
 
 <script>
-// --- (요청 코드) 상가 등 유상취득 계산기 로직 + 납부기한(잔금지급일+60일) ---
+// --- 공통 유틸 & 포매터 ---
 const $=id=>document.getElementById(id);
 const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v;}
 const setHTML=(id,v)=>{const el=$(id);if(el)el.innerHTML=v;}
 const numOf=id=>Number((($(id)?.value)||'').replace(/,/g,'')||0);
-const floor10=n=>Math.floor(n/10)*10;
+const floor10=n=>Math.floor(n/10)*10; // 10원 절사
 const fmt=n=>(Number.isFinite(n)?Math.floor(n).toLocaleString('ko-KR')+'원':'-');
-const ACQ_RATE=0.04,NTS_RATE=0.002,EDU_RATE=0.004,TOTAL_RATE=ACQ_RATE+NTS_RATE+EDU_RATE;
 
 // 날짜 유틸
 const parseLocalDate=s=>{ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y, (m||1)-1, d||1); };
 const addDays=(date,days)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()+days); return d; };
+const addMonths=(date,months)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()); d.setMonth(d.getMonth()+months); if(d.getDate()!==date.getDate()){ d.setDate(0); } return d; };
 const formatYMD=d=>{ if(!d||Number.isNaN(+d)) return '-'; const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; };
 
+// 숫자 입력 3자리 콤마
 document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
-document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')){ calc(); }});
+</script>
 
-function calc(){
+<script>
+// --- (2번) 상가 등 유상취득 계산기 로직 + 납부기한(잔금지급일+60일) ---
+const ACQ_RATE=0.04, NTS_RATE=0.002, EDU_RATE=0.004, TOTAL_RATE=ACQ_RATE+NTS_RATE+EDU_RATE;
+function calc2(){
   const base=numOf('취득가액');
-  const acq=floor10(base*ACQ_RATE),nts=floor10(base*NTS_RATE),edu=floor10(base*EDU_RATE);
+  const acq=floor10(base*ACQ_RATE), nts=floor10(base*NTS_RATE), edu=floor10(base*EDU_RATE);
   const sum=acq+nts+edu;
   const rows=[["취득세","4%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.4%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
-  setHTML('tb',rows);setText('sumY',fmt(sum));setText('sum_total',fmt(sum));setText('과표',fmt(base));
+  setHTML('tb',rows); setText('sumY',fmt(sum)); setText('sum_total',fmt(sum)); setText('과표',fmt(base));
   setText('sum_guide','취득(잔금지급일)일로부터 60일 내');
 
-  // 납부기한 계산: 잔금지급일 + 60일
   const payDateStr = $('잔금지급일')?.value || '';
   let deadline='-';
-  if(payDateStr){
-    const d=parseLocalDate(payDateStr);
-    if(d){ deadline = formatYMD(addDays(d,60)); }
-  }
+  if(payDateStr){ const d=parseLocalDate(payDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('납부기한', deadline);
 }
-function openPrint(){try{calc();setTimeout(()=>window.print(),0);}catch(e){window.print();}}
+document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')){ calc2(); }});
 </script>
+
+<script>
+// --- (3번) 상속 취득 계산기 로직 + 납부기한(사망일+6개월) ---
+// 기본 세율(주택/비주택 공통 기본)
+const I_ACQ_RATE=0.028, I_NTS_RATE=0.002, I_EDU_RATE=0.0016, I_TOTAL_RATE=I_ACQ_RATE+I_NTS_RATE+I_EDU_RATE; // 3.16%
+
+// 주택 선택 시 전용면적 옵션 표시/숨김, 상호배타 체크 처리
+function refreshAreaOptions(){
+  const isHouse = $('isHouse')?.checked;
+  const isNonHouse = $('isNonHouse')?.checked;
+  // 주택만 체크된 경우에만 전용면적 옵션 노출
+  const showArea = !!isHouse && !isNonHouse;
+  const areaBox = $('areaOptions');
+  const hint = $('areaHint');
+  if(areaBox){ areaBox.classList.toggle('hidden', !showArea); }
+  if(hint){ hint.classList.toggle('hidden', !showArea); }
+  // 주택 체크 해제하거나 비주택 체크 시 면적 선택 초기화
+  if(!showArea){
+    const le = $('area_le_85'), gt = $('area_gt_85');
+    if(le) le.checked=false;
+    if(gt) gt.checked=false;
+  }
+}
+
+// 면적 옵션 상호배타
+function toggleArea(exclusiveId){
+  const ids = ['area_le_85','area_gt_85'];
+  ids.forEach(id=>{
+    if(id!==exclusiveId){
+      const el=$(id); if(el) el.checked=false;
+    }
+  });
+}
+
+function calc3(){
+  const base=numOf('상속_과세표준');
+  const isHouse = $('isHouse')?.checked || false;
+  const isNonHouse = $('isNonHouse')?.checked || false;
+  const le85 = $('area_le_85')?.checked || false;
+  const gt85 = $('area_gt_85')?.checked || false;
+
+  // 농어촌특별세율 결정 로직
+  let ntsRate = I_NTS_RATE;
+  let ntsRateLabel = '0.2%';
+  // 요청사항: 주택 + 전용면적 85m² 이하 선택 시 농특세 미부과
+  if(isHouse && !isNonHouse){
+    if(le85){
+      ntsRate = 0;
+      ntsRateLabel = '미부과';
+    }else if(gt85){
+      ntsRate = I_NTS_RATE;
+      ntsRateLabel = '0.2%';
+    }else{
+      // 면적 미선택 시 기본 유지(0.2%)
+      ntsRate = I_NTS_RATE;
+      ntsRateLabel = '0.2%';
+    }
+  }else{
+    // 비주택 포함 시 기본(0.2%)
+    ntsRate = I_NTS_RATE;
+    ntsRateLabel = '0.2%';
+  }
+
+  const acq=floor10(base*I_ACQ_RATE);
+  const nts=floor10(base*ntsRate);
+  const edu=floor10(base*I_EDU_RATE);
+  const sum=acq+nts+edu;
+
+  const rows=[
+    ["취득세","2.8%",fmt(acq)],
+    ["농어촌특별세",ntsRateLabel,fmt(nts)],
+    ["지방교육세","0.16%",fmt(edu)],
+  ].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  setHTML('상속_tb',rows);
+  setText('상속_sumY',fmt(sum));
+  setText('상속_sum_total',fmt(sum));
+  setText('상속_과표',fmt(base));
+  // 표의 세율 셀도 동기화
+  setText('상속_농특세율셀', ntsRateLabel);
+
+  setText('상속_sum_guide','사망일(상속개시일)로부터 6개월 내');
+
+  const deathStr = $('사망일')?.value || '';
+  let deadline='-';
+  if(deathStr){ const d=parseLocalDate(deathStr); if(d){ deadline = formatYMD(addMonths(d,6)); } }
+  setText('상속_납부기한', deadline);
+}
+
+// 이벤트 바인딩
+document.addEventListener('change',e=>{
+  const id = e.target?.id || '';
+  if(id==='사망일'){ calc3(); }
+  if(id==='isHouse' || id==='isNonHouse'){
+    refreshAreaOptions();
+    calc3();
+  }
+  if(id==='area_le_85'){
+    if(e.target.checked) toggleArea('area_le_85');
+    calc3();
+  }
+  if(id==='area_gt_85'){
+    if(e.target.checked) toggleArea('area_gt_85');
+    calc3();
+  }
+});
+
+// 초기 표시 상태 동기화
+document.addEventListener('DOMContentLoaded', refreshAreaOptions);
+
+function openPrint(){ try{ calc2(); calc3(); setTimeout(()=>window.print(),0);}catch(e){ window.print(); } }
+</script>
+
 <script>
 // --- PWA 설치 로직 (설치 가능/불가 모두 동작 + 설치 후 자동 숨김) ---
 let deferredPrompt=null;
@@ -344,14 +581,11 @@ async function openInstall(){
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice.catch(()=>null);
       deferredPrompt=null;
-      // 사용자가 승인하면 곧 appinstalled 이벤트가 옴
       if(!choice || choice.outcome!=='accepted'){
-        // 거절 시에도 버튼은 유지
         updateInstallUI();
       }
       return;
     }
-    // 프롬프트 미지원/아직 준비 전 → 환경별 설치 안내
     if(isiOS && isSafari){
       alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.');
     }else{
@@ -408,15 +642,13 @@ try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', 
     try{
       if(typeof _openInstall === 'function'){
         const ret = _openInstall();
-        try{
-          // deferredPrompt.userChoice.then(...) 내부에서 처리되지 않는 브라우저 대비
-          setTimeout(update, 1000);
-        }catch(e){}
+        try{ setTimeout(update, 1000); }catch(e){}
         return ret;
       }
     }catch(e){}
   };
 })();
 </script>
+</body>
 </html>
-
+.
