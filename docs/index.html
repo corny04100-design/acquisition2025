@@ -103,14 +103,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
 .deadline-box .label{font-size:.8rem;color:#374151}
 .deadline-box .value{font-size:1.05rem;font-weight:700}
-$1
 <style>
 /* PWA 모드에서는 CSS만으로도 숨김 처리 (추가 보강) */
 @media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
   .btn-install{display:none !important}
 }
 </style>
-$1
 <body>
   <!-- 스플래시: 1.5초 후 자동 전환 -->
   <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
@@ -245,7 +243,6 @@ $1
                 <tr><td>지방교육세</td><td>0.4%</td></tr>
               </tbody>
             </table>
-          $1
           <div class="deadline-box center-30" style="margin-top:10px">
             <div class="label">취득세 납부기한</div>
             <div class="value" id="납부기한">-</div>
