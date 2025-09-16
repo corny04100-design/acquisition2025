@@ -10,13 +10,14 @@
 <link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
 :root{
-  --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
-  --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
-  --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
-  --warn:#dc2626; --muted:#9ca3af;
+--bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
+--brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
+--input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
+--warn:#dc2626; --muted:#9ca3af;
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.65}
 .hidden{display:none !important}
+
 
 /* 공통 헤더 */
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
@@ -29,8 +30,8 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .icon-btn.icon-only{width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .icon-btn.icon-only svg{width:20px;height:20px}
 .icon-stroke{fill:none;stroke:#1f2937;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-/* 앱 설치 상태에서는 앱설치 버튼 완전 숨김 */
 .installed .btn-install{display:none !important}
+
 
 /* 공통 레이아웃 */
 .wrap{max-width:960px;margin:20px auto 80px;padding:0 16px}
@@ -39,9 +40,11 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
 .btn:hover{filter:brightness(1.05)}
 
+
 /* 스플래시 */
 #splash{position:fixed;inset:0;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;color:#fff;z-index:100}
 #splash h1{font-size:2rem;letter-spacing:.08em}
+
 
 /* 메뉴 */
 #view-menu .menu-wrap{max-width:640px;margin:0 auto}
@@ -51,16 +54,16 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 /* 2번(준비 완료) 강조 스타일 */
 .menu-item.ready{background:#fef2f2;border-color:#fecaca}
 .menu-item.ready .menu-num{background:#fee2e2}
-.menu-item.ready:hover{background:#fee2e2} 
+.menu-item.ready:hover{background:#fee2e2}
 .menu-num{min-width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--brand-weak);font-weight:800}
 .menu-text{font-size:1.05rem;font-weight:700}
 .menu-note{font-size:.85rem;color:var(--text-sub)}
 
-/* 표/입력(2번 화면에서 사용) */
 
+/* 표/입력(2/3번 화면에서 사용) */
 .grid{display:grid;grid-template-columns:50% 50%;gap:20px}
 #view-calc2 .grid{grid-template-columns:1fr !important}
-#view-calc2 .grid{grid-template-columns:1fr !important}
+#view-calc3 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 h2{font-size:1.05rem;margin:0}
 h2 .unit{font-size:0.75rem;color:var(--text-sub)}
@@ -79,39 +82,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .sum-box .value.note{font-size:0.75rem}
 .nowrap{white-space:nowrap}
 .center-30{width:60%;min-width:420px;max-width:680px;margin:16px auto 0 auto}
-.nowrap td,.nowrap th{white-space:nowrap}
-/* 모든 한글 문구 중앙 정렬 */
-.title,.brand,.header-row h2,label,summary,.warn,.sum-box .label,.sum-box .value{ text-align:center; }
-.table tfoot th:nth-child(2), .table tfoot th:nth-child(3){text-align:right}
-
-/* 인쇄 최적화 */
-@media print{
-  @page{size:A4 portrait;margin:10mm}
-  body{font-size:11pt}
-  .wrap{max-width:100%;margin:0;padding:0}
-  .grid{grid-template-columns:1fr 1fr;gap:8px}
-  .card{padding:10px;box-shadow:none;border-color:#e5e7eb}
-  .sum-box{margin:6px 0;padding:10px}
-  .table{font-size:10pt}
-  .table th,.table td{padding:6px}
-  .title{margin:4px 0 8px 0;font-size:16pt}
-  header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
-}
-#view-calc2 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px;align-items:end;margin-bottom:12px}
-#view-calc2 .input-grid input.num{width:100%}
-#view-calc2 input.date{display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
-.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
-.deadline-box .label{font-size:.8rem;color:#374151}
-.deadline-box .value{font-size:1.05rem;font-weight:700}
-<style>
-/* PWA 모드에서는 CSS만으로도 숨김 처리 (추가 보강) */
-@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
-  .btn-install{display:none !important}
-}
-</style>
-<body>
-  <!-- 스플래시: 1.5초 후 자동 전환 -->
-  <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
+<div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
 
   <!-- 메뉴 화면 -->
   
