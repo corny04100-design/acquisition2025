@@ -9,7 +9,12 @@
 <link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
 <link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
-:root{ --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280; --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6; --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06); --warn:#dc2626; --muted:#9ca3af; --sky:#e0f2fe; --yellow:#fef9c3; }
+:root{
+  --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
+  --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
+  --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
+  --warn:#dc2626; --muted:#9ca3af; --sky:#e0f2fe; --yellow:#fef9c3;
+}
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
 .hidden{display:none !important}
 
@@ -17,7 +22,6 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
 header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:7px;flex-wrap:nowrap}
 .brand{display:flex;align-items:center;gap:7px;font-weight:700;font-size:0.95rem;white-space:nowrap}
-.brand .logo{display:none}
 .app-actions{display:flex;gap:5px;margin-left:auto;flex-wrap:nowrap}
 .icon-btn{padding:5px 9px;border:1px solid var(--line);border-radius:8px;background:var(--brand-weak);font-size:0.78rem;font-weight:700;color:var(--text);text-decoration:none;transition:background .15s;white-space:nowrap}
 .icon-btn:hover{background:#dbeafe}
@@ -58,10 +62,27 @@ input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d
 .table{width:100%;border-collapse:collapse;margin-top:8px;font-size:0.88rem}
 .table th,.table td{padding:9px;border-bottom:1px solid var(--line)}
 .table th{text-align:center;background:var(--bg)}
+/* 요청: "세율" "세액" 헤더를 우측 정렬 */
+.table thead th:nth-child(2),
+.table thead th:nth-child(3){ text-align:right; }
 .table td{text-align:right}
 .table td:first-child{text-align:center}
 tfoot tr{background:var(--sum-bg);font-weight:700}
-.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:9px;text-align:center;font-weight:700}
+.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700} /* 50%씩 & 가운데 */
+
+/* ===== 요청 반영: calc3 입력 라벨 가운데 정렬 ===== */
+#view-calc3 .input-grid .col-amount label,
+#view-calc3 .input-grid .col-date label{ text-align:center }
+
+/* ===== 요청 반영: details(세율 및 과세표준) 표를 가운데 정렬 & 2열 50%씩 ===== */
+#view-calc2 details .table td,
+#view-calc2 details .table th,
+#view-calc3 details .table td,
+#view-calc3 details .table th{ text-align:center }
+#view-calc2 details .table td,
+#view-calc3 details .table td{ width:50% }
+
+/* 경고문 */
 .warn{color:var(--warn);font-size:0.83rem;margin-top:8px;text-align:right}
 .sum-box .label{font-size:0.76rem;color:#374151}
 .sum-box .value{font-size:1.08rem}
@@ -75,7 +96,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   .wrap{max-width:100%;margin:0;padding:0}
   .grid{grid-template-columns:1fr 1fr;gap:7px}
   .card{padding:9px;box-shadow:none;border-color:#e5e7eb;margin-bottom:10px}
-  .sum-box{margin:5px 0;padding:9px}
+  .sum-box{margin:5px 0;padding:9px;grid-template-columns:50% 50%}
   .table{font-size:10pt}
   .table th,.table td{padding:5px}
   .title{margin:4px 0 8px 0;font-size:16pt}
@@ -87,25 +108,51 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .deadline-box .label{font-size:.78rem;color:#374151}
 .deadline-box .value{font-size:1.03rem;font-weight:700}
 
-/* === 아이콘칩(전용면적/특례) === */
-#view-calc3 .area-options{display:flex;flex-direction:column;gap:9px;margin:6px 0 8px 0}
-.icon-chip{display:inline-flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow)}
+/* ===== 아이콘칩(전용면적/특례) & 체크박스/문구 스타일 (1단계 작게 + 간격 좁게) ===== */
+#view-calc3 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
+.icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow)}
 .icon-chip.sky{background:var(--sky);border-color:#bae6fd}
 .icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
-.icon-chip label{display:inline-flex;align-items:center;gap:8px;margin:0}
+.icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
 .icon-chip .sep{opacity:.6}
+.sep{opacity:.6} /* 공통 구분기호 스타일 */
 
-/* === 요청: 체크박스+문구 강조 === */
+/* 체크박스 라벨 사이즈 다운 */
 #view-calc3 .type-options label span,
-#view-calc3 .area-options label span{color:#111827;font-size:1.1rem;font-weight:800}
-#view-calc3 input[type="checkbox"]{width:18px;height:18px;accent-color:#111827}
+#view-calc3 .area-options label span{
+  color:#111827;font-size:1.0rem;font-weight:800;
+}
+#view-calc3 input[type="checkbox"]{
+  width:16px;height:16px;accent-color:#111827;
+}
 
 /* PWA 모드에서 설치 버튼 숨김 */
-@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){ .btn-install{display:none !important} }
+@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
+  .btn-install{display:none !important}
+}
+
+/* ===== 미리보기 오버레이 (제목/문구 없음) ===== */
+#previewOverlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
+#previewOverlay.show{display:flex}
+.preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:12px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:8px}
+.preview-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.preview-toolbar .left,.preview-toolbar .right{height:0;overflow:hidden}
+.preview-page-wrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto}
+.preview-page{width:794px;height:1123px;border:1px solid #e5e7eb;box-shadow:0 6px 20px rgba(0,0,0,.08);background:#fff;transform-origin:top left;position:relative}
+.preview-content{position:absolute;inset:0;overflow:hidden;padding:12px}
+.preview-content .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
+.preview-content .grid{grid-template-columns:1fr 1fr !important;gap:8px !important}
+.preview-content .card{padding:10px !important}
+.preview-content .sum-box{margin:6px 0 !important;padding:10px !important}
+.preview-content .table{font-size:10pt !important}
+.preview-content .table th,.preview-content .table td{padding:6px !important}
+.preview-content .title{margin:4px 0 8px 0 !important;font-size:16pt !important}
+.preview-content header.appbar,.preview-content .app-actions,.preview-content #splash,.preview-content .menu-wrap{display:none !important}
+.preview-scale{transform-origin: top left; display:inline-block;}
 </style>
 </head>
 <body>
-  <!-- 스플래시: 1.5초 후 자동 전환 -->
+  <!-- 스플래시 -->
   <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
 
   <!-- 메뉴 화면 -->
@@ -218,10 +265,11 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
                 <tr><td>지방교육세</td><td>0.4%</td></tr>
               </tbody>
             </table>
-          <div class="deadline-box center-30" style="margin-top:10px">
-            <div class="label">취득세 납부기한</div>
-            <div class="value" id="납부기한">-</div>
-          </div>
+            <div class="deadline-box center-30" style="margin-top:10px">
+              <div class="label">취득세 납부기한</div>
+              <div class="value" id="납부기한">-</div>
+            </div>
+          </details>
         </div>
         <div class="card">
           <h2>2. 산출 세액</h2>
@@ -269,19 +317,22 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:14px;flex-wrap:wrap;">
-            <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
-            <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
+          <!-- 유형 선택: 1. 주택 | 2. 주택이 아닌 부동산 -->
+          <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택"
+               style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;gap:10px;flex-wrap:wrap;">
+            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
+            <span class="sep">|</span>
+            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
           </div>
 
           <div id="areaOptions" class="area-options hidden" aria-live="polite">
-            <!-- 전용면적 아이콘칩 (하늘색 옅은 배경) -->
+            <!-- 전용면적 아이콘칩 (하늘색) -->
             <div class="icon-chip sky" id="areaBox" role="group" aria-label="전용면적 선택">
               <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
               <span class="sep">|</span>
               <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
             </div>
-            <!-- 세율 특례 아이콘박스 (노랑 옅은 배경) -->
+            <!-- 세율 특례 아이콘칩 (노랑) -->
             <div class="icon-chip yellow" id="specialBox" role="group" aria-label="세율 특례 선택" title="체크 시 취득세율 0.8% 적용 및 농어촌특별세 미부과">
               <label>
                 <input type="checkbox" id="one_home_special" />
@@ -340,12 +391,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- ====== 한페이지 미리보기 오버레이 (닫기 버튼 없음) ====== -->
-  <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="한페이지 미리보기">
+  <!-- ====== 미리보기 오버레이(문구 없음) ====== -->
+  <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="">
     <div class="preview-card">
       <div class="preview-toolbar">
-        <div class="left"><strong>한페이지 미리보기</strong></div>
-        <div class="right"><!-- 닫기 버튼 없음 --></div>
+        <div class="left"></div>
+        <div class="right"></div>
       </div>
       <div class="preview-page-wrap">
         <div class="preview-page" id="previewPage">
@@ -360,7 +411,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 function showView(name, push = true){
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
   const el=document.getElementById('view-'+name);
-  if(el){ el.classList.remove('hidden'); window.scrollTo(0,0);
+  if(el){
+    el.classList.remove('hidden'); window.scrollTo(0,0);
     if(push){ try{ history.pushState({view:name}, '', '#'+name); }catch(e){} }
   }
 }
@@ -393,6 +445,7 @@ const addDays=(date,days)=>{ const d=new Date(date.getFullYear(), date.getMonth(
 const addMonths=(date,months)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()); d.setMonth(d.getMonth()+months); if(d.getDate()!==date.getDate()){ d.setDate(0); } return d; };
 const formatYMD=d=>{ if(!d||Number.isNaN(+d)) return '-'; const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; };
 
+// 숫자 입력 3자리 콤마
 document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
 </script>
 
@@ -450,15 +503,13 @@ function calc3(){
   const gt85 = $('area_gt_85')?.checked || false;
   const special = $('one_home_special')?.checked || false;
 
-  // --- 농특세 계산 ---
+  // 농특세: 주택≤85 또는 특례 체크 시 미부과
   let ntsRate = I_NTS_RATE;
   let ntsRateLabel = '0.2%';
-  if(isHouse && !isNonHouse){
-    if(le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
-  }
+  if(isHouse && !isNonHouse && le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
   if(special){ ntsRate = 0; ntsRateLabel = '미부과'; }
 
-  // --- 취득세율 계산: 특례 체크 시 무조건 0.8% ---
+  // 취득세율: 특례 체크 시 무조건 0.8%
   let acqRate = I_ACQ_RATE_DEFAULT;
   if(special){ acqRate = I_ACQ_RATE_SPECIAL; }
   const acqRateLabel = (acqRate*100).toFixed(1) + '%';
@@ -496,7 +547,6 @@ document.addEventListener('change',e=>{
   if(id==='area_gt_85'){ if(e.target.checked) toggleArea('area_gt_85'); calc3(); }
   if(id==='one_home_special'){ calc3(); }
 });
-
 document.addEventListener('DOMContentLoaded', ()=>{ refreshAreaOptions(); });
 </script>
 
@@ -532,7 +582,7 @@ try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', 
 </script>
 
 <script>
-// ===== 한페이지 미리보기 로직 (닫기 버튼 없음) =====
+// ===== 미리보기 로직 (문구/닫기 없음) =====
 function getActiveView(){
   const v = Array.from(document.querySelectorAll('.view')).find(el=>!el.classList.contains('hidden'));
   return v || document.getElementById('view-menu');
@@ -540,28 +590,41 @@ function getActiveView(){
 function openOnePagePreview(){
   try{ calc2(); }catch(e){}
   try{ calc3(); }catch(e){}
-  const overlay = document.getElementById('previewOverlay');
-  const page = document.getElementById('previewPage');
-  const content = document.getElementById('previewContent');
+
+  const overlay = $('previewOverlay');
+  const page = $('previewPage');
+  const content = $('previewContent');
   if(!overlay||!page||!content) return;
+
   const active = getActiveView();
   const clone = active.cloneNode(true);
   clone.setAttribute('data-preview','1');
+
   const holder = document.createElement('div');
   holder.className = 'preview-scale';
   holder.appendChild(clone);
   content.innerHTML='';
   content.appendChild(holder);
+
   overlay.classList.add('show');
-  requestAnimationFrame(()=>{
-    const targetW = page.clientWidth - 24, targetH = page.clientHeight - 24;
-    holder.style.transform = 'scale(1)';
-    const naturalW = holder.scrollWidth || holder.offsetWidth || targetW;
-    const naturalH = holder.scrollHeight || holder.offsetHeight || targetH;
-    const scale = Math.min(targetW/naturalW, targetH/naturalH, 1);
-    holder.style.transform = `scale(${scale})`;
-  });
+  requestAnimationFrame(fitPreviewScale);
 }
+function fitPreviewScale(){
+  const page = $('previewPage');
+  const content = $('previewContent');
+  const holder = content && content.querySelector('.preview-scale');
+  if(!page || !content || !holder) return;
+
+  const targetW = page.clientWidth - 24;
+  const targetH = page.clientHeight - 24;
+
+  holder.style.transform = 'scale(1)';
+  const naturalW = holder.scrollWidth || holder.offsetWidth || targetW;
+  const naturalH = holder.scrollHeight || holder.offsetHeight || targetH;
+  const scale = Math.min(targetW / naturalW, targetH / naturalH, 1);
+  holder.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', fitPreviewScale);
 </script>
 </body>
 </html>
