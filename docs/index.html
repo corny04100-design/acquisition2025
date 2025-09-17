@@ -53,7 +53,7 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 
 /* 표/입력 */
 .grid{display:grid;grid-template-columns:50% 50%;gap:18px}
-#view-calc2 .grid,#view-calc3 .grid{grid-template-columns:1fr !important}
+#view-calc2 .grid,#view-calc3 .grid,#view-calc4 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 h2{font-size:1.03rem;margin:0}
 h2 .unit{font-size:0.73rem;color:var(--text-sub)}
@@ -78,9 +78,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 #view-calc2 details .table td,
 #view-calc2 details .table th,
 #view-calc3 details .table td,
-#view-calc3 details .table th{ text-align:center }
+#view-calc3 details .table th,
+#view-calc4 details .table td,
+#view-calc4 details .table th{ text-align:center }
 #view-calc2 details .table td,
-#view-calc3 details .table td{ width:50% }
+#view-calc3 details .table td,
+#view-calc4 details .table td{ width:50% }
 
 /* 경고문 */
 .warn{color:var(--warn);font-size:0.83rem;margin-top:8px;text-align:right}
@@ -102,8 +105,9 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   .title{margin:4px 0 8px 0;font-size:16pt}
 }
 #view-calc2 .input-grid,#view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
-#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num{width:70%}
-#view-calc2 input.date,#view-calc3 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
+#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
+#view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
 .deadline-box .label{font-size:.78rem;color:#374151}
 .deadline-box .value{font-size:1.03rem;font-weight:700}
@@ -190,11 +194,10 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <div class="menu-text">상속 취득</div>
             </div>
           </button>
-          <button class="menu-item" onclick="showView('coming4')">
+          <button class="menu-item ready" onclick="showView('calc4')">
             <div class="menu-num">4</div>
             <div>
               <div class="menu-text">증여 취득</div>
-              <div class="menu-note">준비 중</div>
             </div>
           </button>
         </div>
@@ -202,7 +205,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 1/4 번: 준비 중 화면들 -->
+  <!-- 1/4 번: 준비 중 화면들 (1만 사용) -->
   <div id="view-coming1" class="view hidden">
     <div class="wrap">
       <div class="card" style="text-align:center">
@@ -212,6 +215,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </div>
   </div>
+  <!-- 기존 coming4는 유지하되 메뉴 연결은 calc4로 변경됨 (접근되지 않음) -->
   <div id="view-coming4" class="view hidden">
     <div class="wrap">
       <div class="card" style="text-align:center">
@@ -391,6 +395,77 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
+  <!-- 4번: 증여 취득 계산기 -->
+  <div id="view-calc4" class="view hidden" aria-labelledby="calc4-heading">
+    <header class="appbar">
+      <div class="row">
+        <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div class="brand"><span>2025년 취득세 계산(증여 취득)</span></div>
+        <div class="app-actions">
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
+          <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
+          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
+        </div>
+      </div>
+    </header>
+    <div class="wrap">
+      <h1 id="calc4-heading" class="title">2025년 취득세 계산(증여 취득)</h1>
+      <div class="grid">
+        <div class="card">
+          <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
+          <div class="input-grid">
+            <div class="col col-amount">
+              <label for="증여_과세표준">과세표준(감정평가액,시가인정액,시가표준액)</label>
+              <input id="증여_과세표준" class="num" type="text" inputmode="numeric" placeholder="숫자만 입력" />
+            </div>
+            <div class="col col-date">
+              <label for="증여일">증여일(취득일)</label>
+              <input id="증여일" type="date" class="date" />
+            </div>
+          </div>
+          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc4()">✍️ 계산하기</button></div>
+          <details class="center-30" style="margin-top:16px" open>
+            <summary>세율 및 과세표준</summary>
+            <table class="table nowrap">
+              <tbody>
+                <tr><td>과세표준</td><td id="증여_과표">-</td></tr>
+                <tr><td>취득세</td><td>3.5%</td></tr>
+                <tr><td>농어촌특별세</td><td>0.2%</td></tr>
+                <tr><td>지방교육세</td><td>0.3%</td></tr>
+              </tbody>
+            </table>
+            <div class="deadline-box center-30" style="margin-top:10px">
+              <div class="label">취득세 납부기한</div>
+              <div class="value" id="증여_납부기한">-</div>
+            </div>
+          </details>
+        </div>
+        <div class="card">
+          <h2>2. 산출 세액</h2>
+          <div class="sum-box" role="status" aria-live="polite">
+            <div>
+              <div class="label">총 합계 세액</div>
+              <div class="value" id="증여_sum_total">-</div>
+            </div>
+            <div>
+              <div class="label">납부 안내</div>
+              <div class="value note nowrap" id="증여_sum_guide">취득(증여일)로부터 60일 내</div>
+            </div>
+          </div>
+          <table class="table">
+            <thead><tr><th>세목</th><th>세율</th><th>세액</th></tr></thead>
+            <tbody id="증여_tb"><tr><td colspan="3" style="text-align:center;color:#6b7280">입력 후 ‘계산하기’를 눌러주세요.</td></tr></tbody>
+            <tfoot><tr><th>합계 세액</th><th>4.0%</th><th id="증여_sumY">-</th></tr></tfoot>
+          </table>
+          <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ====== 미리보기 오버레이(문구 없음) ====== -->
   <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="">
     <div class="preview-card">
@@ -547,7 +622,34 @@ document.addEventListener('change',e=>{
   if(id==='area_gt_85'){ if(e.target.checked) toggleArea('area_gt_85'); calc3(); }
   if(id==='one_home_special'){ calc3(); }
 });
+
 document.addEventListener('DOMContentLoaded', ()=>{ refreshAreaOptions(); });
+</script>
+
+<script>
+// --- (4번) 증여 취득 계산기 ---
+const G_ACQ_RATE=0.035, G_NTS_RATE=0.002, G_EDU_RATE=0.003; // 합계 4.0%
+function calc4(){
+  const base=numOf('증여_과세표준');
+  const acq=floor10(base*G_ACQ_RATE);
+  const nts=floor10(base*G_NTS_RATE);
+  const edu=floor10(base*G_EDU_RATE);
+  const sum=acq+nts+edu;
+
+  const rows=[["취득세","3.5%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.3%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  setHTML('증여_tb',rows);
+  setText('증여_sumY',fmt(sum));
+  setText('증여_sum_total',fmt(sum));
+  setText('증여_과표',fmt(base));
+
+  setText('증여_sum_guide','취득(증여일)로부터 60일 내');
+  const giftDateStr = $('증여일')?.value || '';
+  let deadline='-';
+  if(giftDateStr){ const d=parseLocalDate(giftDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
+  setText('증여_납부기한', deadline);
+}
+
+document.addEventListener('change',e=>{ if(e.target && (e.target.id==='증여일')){ calc4(); }});
 </script>
 
 <script>
@@ -590,6 +692,7 @@ function getActiveView(){
 function openOnePagePreview(){
   try{ calc2(); }catch(e){}
   try{ calc3(); }catch(e){}
+  try{ calc4(); }catch(e){}
 
   const overlay = $('previewOverlay');
   const page = $('previewPage');
