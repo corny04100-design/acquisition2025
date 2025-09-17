@@ -558,17 +558,17 @@ window.addEventListener('popstate', (event)=>{
   showView(view, false);
 });
 window.addEventListener('load',()=>{
-  // 1.3초 후 스플래시 페이드아웃
+  // 4초 후 스플래시 페이드아웃
   const sp=document.getElementById('splash');
   const endSplash=()=>{ if(!sp) return; sp.style.transition='opacity .35s ease'; sp.style.opacity='0';
-    setTimeout(()=>{ sp.classList.add('hidden'); }, 360);
+    setTimeout(()=>{ sp.classList.add('hidden'); }, 760);
   };
   setTimeout(()=>{
     endSplash();
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
     showView(initial, false);
     try{ history.replaceState({view:initial}, '', '#'+initial); }catch(e){}
-  },3000);
+  },4000);
 });
 </script>
 
