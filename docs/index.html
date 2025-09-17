@@ -6,17 +6,58 @@
 <title>취득세 계산 · 메뉴</title>
 <meta name="theme-color" content="#2c58ff" />
 <link rel="manifest" href="manifest.webmanifest?v=20250916">
-<link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="./icon-512-v5.png" />
+<link rel="icon" href="./icon-192-v7.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="./icon-512-v7.png" />
 <style>
 :root{
   --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
   --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
   --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
   --warn:#dc2626; --muted:#9ca3af; --sky:#e0f2fe; --yellow:#fef9c3;
+  --green:#dcfce7; --green-line:#bbf7d0;
+  --splash-a:#ecf3ff; --splash-b:#f5faff; --splash-accent:#2563eb;
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
 .hidden{display:none !important}
+
+/* ===== 전체 화면 스플래시 (배경 + 그림 + 진행바) ===== */
+#splash{
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+  background:
+    radial-gradient(1200px 800px at 10% 10%, rgba(37,99,235,.08), transparent 60%),
+    radial-gradient(900px 700px at 90% 20%, rgba(16,185,129,.08), transparent 60%),
+    radial-gradient(800px 600px at 30% 90%, rgba(99,102,241,.08), transparent 60%),
+    linear-gradient(180deg, var(--splash-b), var(--splash-a));
+  overflow:hidden;
+}
+#splash .ring{
+  position:absolute; width:140vmax; height:140vmax; border-radius:50%;
+  background:radial-gradient(circle at center, rgba(37,99,235,.06), transparent 60%);
+  animation: ringFloat 9s ease-in-out infinite;
+}
+@keyframes ringFloat{ 0%,100%{ transform:translate(-10%, -8%) rotate(0deg);} 50%{ transform:translate(-6%, -12%) rotate(8deg);} }
+
+#splash .card{
+  background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
+  border:1px solid rgba(37,99,235,.15); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.12);
+  padding:22px 26px; display:flex; align-items:center; gap:16px;
+}
+#splash .art{ width:84px; height:84px; flex:0 0 auto }
+#splash .title-wrap{ display:flex; flex-direction:column; gap:2px }
+#splash h1{font-size:1.35rem;margin:0;color:#0f172a;font-weight:900;letter-spacing:-0.01em}
+#splash .sub{font-size:.9rem;color:#334155}
+
+#splash .bar{
+  width:min(340px, 80vw); height:6px; border-radius:999px;
+  background:rgba(15,23,42,.12); overflow:hidden; box-shadow:inset 0 0 0 1px rgba(15,23,42,.06);
+}
+#splash .bar > i{
+  display:block; height:100%; width:0%;
+  background:linear-gradient(90deg, var(--splash-accent), #4f46e5);
+  animation: loadGrow 1.3s linear forwards;
+}
+@keyframes loadGrow{ to{ width:100% } }
 
 /* 공통 헤더 */
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
@@ -62,28 +103,20 @@ input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d
 .table{width:100%;border-collapse:collapse;margin-top:8px;font-size:0.88rem}
 .table th,.table td{padding:9px;border-bottom:1px solid var(--line)}
 .table th{text-align:center;background:var(--bg)}
-/* 요청: "세율" "세액" 헤더를 우측 정렬 */
-.table thead th:nth-child(2),
-.table thead th:nth-child(3){ text-align:right; }
+.table thead th:nth-child(2),.table thead th:nth-child(3){text-align:right}
 .table td{text-align:right}
 .table td:first-child{text-align:center}
 tfoot tr{background:var(--sum-bg);font-weight:700}
-.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700} /* 50%씩 & 가운데 */
+.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700}
 
-/* ===== 요청 반영: calc3 입력 라벨 가운데 정렬 ===== */
-#view-calc3 .input-grid .col-amount label,
-#view-calc3 .input-grid .col-date label{ text-align:center }
+/* calc3 라벨 가운데 */
+#view-calc3 .input-grid .col-amount label,#view-calc3 .input-grid .col-date label{ text-align:center }
 
-/* ===== 요청 반영: details(세율 및 과세표준) 표를 가운데 정렬 & 2열 50%씩 ===== */
-#view-calc2 details .table td,
-#view-calc2 details .table th,
-#view-calc3 details .table td,
-#view-calc3 details .table th,
-#view-calc4 details .table td,
-#view-calc4 details .table th{ text-align:center }
-#view-calc2 details .table td,
-#view-calc3 details .table td,
-#view-calc4 details .table td{ width:50% }
+/* details 표 가운데 */
+#view-calc2 details .table td,#view-calc2 details .table th,
+#view-calc3 details .table td,#view-calc3 details .table th,
+#view-calc4 details .table td,#view-calc4 details .table th{ text-align:center }
+#view-calc2 details .table td,#view-calc3 details .table td,#view-calc4 details .table td{ width:50% }
 
 /* 경고문 */
 .warn{color:var(--warn);font-size:0.83rem;margin-top:8px;text-align:right}
@@ -104,38 +137,32 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   .table th,.table td{padding:5px}
   .title{margin:4px 0 8px 0;font-size:16pt}
 }
-#view-calc2 .input-grid,#view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
-#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
+#view-calc2 .input-grid,#view-calc3 .input-grid,#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
 #view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
 #view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
 .deadline-box .label{font-size:.78rem;color:#374151}
 .deadline-box .value{font-size:1.03rem;font-weight:700}
 
-/* ===== 아이콘칩(전용면적/특례) & 체크박스/문구 스타일 (1단계 작게 + 간격 좁게) ===== */
-#view-calc3 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
+/* 아이콘칩 & 체크박스 */
+#view-calc3 .area-options,#view-calc4 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
 .icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow)}
 .icon-chip.sky{background:var(--sky);border-color:#bae6fd}
 .icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
+.icon-chip.green{background:var(--green);border-color:var(--green-line)}
 .icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
 .icon-chip .sep{opacity:.6}
-.sep{opacity:.6} /* 공통 구분기호 스타일 */
+.sep{opacity:.6}
+#view-calc3 .type-options label span,#view-calc4 .type-options label span,
+#view-calc3 .area-options label span,#view-calc4 .area-options label span{ color:#111827;font-size:1.0rem;font-weight:800; }
+#view-calc3 input[type="checkbox"],#view-calc4 input[type="checkbox"]{ width:16px;height:16px;accent-color:#111827 }
 
-/* 체크박스 라벨 사이즈 다운 */
-#view-calc3 .type-options label span,
-#view-calc3 .area-options label span{
-  color:#111827;font-size:1.0rem;font-weight:800;
-}
-#view-calc3 input[type="checkbox"]{
-  width:16px;height:16px;accent-color:#111827;
-}
-
-/* PWA 모드에서 설치 버튼 숨김 */
+/* PWA 모드 */
 @media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
   .btn-install{display:none !important}
 }
 
-/* ===== 미리보기 오버레이 (제목/문구 없음) ===== */
+/* 미리보기 오버레이 */
 #previewOverlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
 #previewOverlay.show{display:flex}
 .preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:12px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:8px}
@@ -156,8 +183,35 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 </style>
 </head>
 <body>
-  <!-- 스플래시 -->
-  <div id="splash" role="status" aria-live="polite"><h1>취득세 계산</h1></div>
+  <!-- ===== 전체 화면 스플래시 ===== -->
+  <div id="splash" role="status" aria-live="polite">
+    <div class="ring" aria-hidden="true"></div>
+    <div class="card" aria-hidden="true">
+      <!-- 간단한 일러스트: 집 + 서류 + 계산기 (SVG) -->
+      <svg class="art" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- 집 -->
+        <path d="M12 48 L48 22 L84 48" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="22" y="48" width="24" height="26" rx="3" fill="none" stroke="#1f2937" stroke-width="2"/>
+        <rect x="30" y="58" width="8" height="16" rx="1.5" fill="none" stroke="#1f2937" stroke-width="2"/>
+        <!-- 서류 -->
+        <rect x="55" y="50" width="18" height="22" rx="2.5" fill="white" stroke="#2563eb" stroke-width="2"/>
+        <line x1="59" y1="56" x2="71" y2="56" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+        <line x1="59" y1="61" x2="71" y2="61" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+        <line x1="59" y1="66" x2="71" y2="66" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+        <!-- 계산기 -->
+        <rect x="6" y="58" width="16" height="18" rx="2.5" fill="white" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="11" cy="63" r="1.7" fill="#22c55e"/>
+        <circle cx="17" cy="63" r="1.7" fill="#22c55e"/>
+        <circle cx="11" cy="69" r="1.7" fill="#22c55e"/>
+        <circle cx="17" cy="69" r="1.7" fill="#22c55e"/>
+      </svg>
+      <div class="title-wrap">
+        <h1>취득세 계산</h1>
+        <div class="sub">주택/상가/상속/증여 지원</div>
+      </div>
+    </div>
+    <div class="bar" aria-hidden="true"><i></i></div>
+  </div>
 
   <!-- 메뉴 화면 -->
   <div id="view-menu" class="view">
@@ -205,21 +259,11 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 1/4 번: 준비 중 화면들 (1만 사용) -->
+  <!-- 준비 중 화면(1번) -->
   <div id="view-coming1" class="view hidden">
     <div class="wrap">
       <div class="card" style="text-align:center">
         <div class="title">주택 매매 취득</div>
-        <p style="color:var(--text-sub)">이 기능은 준비 중입니다.</p>
-        <button class="btn" onclick="showView('menu')">← 메뉴로</button>
-      </div>
-    </div>
-  </div>
-  <!-- 기존 coming4는 유지하되 메뉴 연결은 calc4로 변경됨 (접근되지 않음) -->
-  <div id="view-coming4" class="view hidden">
-    <div class="wrap">
-      <div class="card" style="text-align:center">
-        <div class="title">증여 취득</div>
         <p style="color:var(--text-sub)">이 기능은 준비 중입니다.</p>
         <button class="btn" onclick="showView('menu')">← 메뉴로</button>
       </div>
@@ -321,22 +365,20 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <!-- 유형 선택: 1. 주택 | 2. 주택이 아닌 부동산 -->
+          <!-- 유형 선택 -->
           <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택"
                style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;gap:10px;flex-wrap:wrap;">
-            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
+            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isHouse" /> <span>1. 주택</span></label>
             <span class="sep">|</span>
-            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
+            <label style="display:inline-flex;align-items:center;gap:5px"><input type="checkbox" id="isNonHouse" /> <span>2. 주택이 아닌 부동산</span></label>
           </div>
 
           <div id="areaOptions" class="area-options hidden" aria-live="polite">
-            <!-- 전용면적 아이콘칩 (하늘색) -->
             <div class="icon-chip sky" id="areaBox" role="group" aria-label="전용면적 선택">
               <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
               <span class="sep">|</span>
               <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
             </div>
-            <!-- 세율 특례 아이콘칩 (노랑) -->
             <div class="icon-chip yellow" id="specialBox" role="group" aria-label="세율 특례 선택" title="체크 시 취득세율 0.8% 적용 및 농어촌특별세 미부과">
               <label>
                 <input type="checkbox" id="one_home_special" />
@@ -404,7 +446,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         </a>
         <div class="brand"><span>2025년 취득세 계산(증여 취득)</span></div>
         <div class="app-actions">
-          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030901M01.do" title="시가인정액 조회">시가인정액</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
           <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
@@ -416,6 +458,25 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
+
+          <!-- 유형 선택(녹색 칩) -->
+          <div class="type-options box" id="g_typeOptions" aria-label="증여 취득 유형 선택">
+            <div class="icon-chip green" id="g_typeBox" role="group" aria-label="증여 취득 유형 선택">
+              <label><input type="checkbox" id="g_isHouse" /> <span>1. 주택</span></label>
+              <span class="sep">|</span>
+              <label><input type="checkbox" id="g_isNonHouse" /> <span>2. 주택이 아닌 부동산</span></label>
+            </div>
+          </div>
+
+          <!-- 전용면적 선택(주택만 표시) -->
+          <div id="g_areaOptions" class="area-options hidden" aria-live="polite">
+            <div class="icon-chip sky" id="g_areaBox" role="group" aria-label="전용면적 선택">
+              <label><input type="checkbox" id="g_area_le_85" /> <span>전용면적 85m² 이하</span></label>
+              <span class="sep">|</span>
+              <label><input type="checkbox" id="g_area_gt_85" /> <span>전용면적 85m² 초과</span></label>
+            </div>
+          </div>
+
           <div class="input-grid">
             <div class="col col-amount">
               <label for="증여_과세표준">과세표준(감정평가액,시가인정액,시가표준액)</label>
@@ -433,7 +494,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <tbody>
                 <tr><td>과세표준</td><td id="증여_과표">-</td></tr>
                 <tr><td>취득세</td><td>3.5%</td></tr>
-                <tr><td>농어촌특별세</td><td>0.2%</td></tr>
+                <tr><td>농어촌특별세</td><td id="증여_농특세율셀">0.2%</td></tr>
                 <tr><td>지방교육세</td><td>0.3%</td></tr>
               </tbody>
             </table>
@@ -458,7 +519,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <table class="table">
             <thead><tr><th>세목</th><th>세율</th><th>세액</th></tr></thead>
             <tbody id="증여_tb"><tr><td colspan="3" style="text-align:center;color:#6b7280">입력 후 ‘계산하기’를 눌러주세요.</td></tr></tbody>
-            <tfoot><tr><th>합계 세액</th><th>4.0%</th><th id="증여_sumY">-</th></tr></tfoot>
+            <tfoot><tr><th>합계 세액</th><th id="증여_합계세율표시">4.00%</th><th id="증여_sumY">-</th></tr></tfoot>
           </table>
           <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
         </div>
@@ -466,7 +527,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- ====== 미리보기 오버레이(문구 없음) ====== -->
+  <!-- 미리보기 오버레이 -->
   <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="">
     <div class="preview-card">
       <div class="preview-toolbar">
@@ -482,12 +543,11 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   </div>
 
 <script>
-// --- 뷰 전환 & 스플래시 + 뒤로가기 히스토리 처리 ---
+/* ===== 뷰 전환 & 스플래시 처리 ===== */
 function showView(name, push = true){
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
   const el=document.getElementById('view-'+name);
-  if(el){
-    el.classList.remove('hidden'); window.scrollTo(0,0);
+  if(el){ el.classList.remove('hidden'); window.scrollTo(0,0);
     if(push){ try{ history.pushState({view:name}, '', '#'+name); }catch(e){} }
   }
 }
@@ -496,37 +556,44 @@ window.addEventListener('popstate', (event)=>{
   showView(view, false);
 });
 window.addEventListener('load',()=>{
+  // 1.3초 후 스플래시 페이드아웃
+  const sp=document.getElementById('splash');
+  const endSplash=()=>{ if(!sp) return; sp.style.transition='opacity .35s ease'; sp.style.opacity='0';
+    setTimeout(()=>{ sp.classList.add('hidden'); }, 360);
+  };
   setTimeout(()=>{
-    const sp=document.getElementById('splash'); if(sp) sp.classList.add('hidden');
+    endSplash();
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
     showView(initial, false);
     try{ history.replaceState({view:initial}, '', '#'+initial); }catch(e){}
-  },1500);
+  },1300);
 });
 </script>
 
 <script>
-// --- 공통 유틸 & 포매터 ---
+/* ===== 공통 유틸 ===== */
 const $=id=>document.getElementById(id);
 const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v;}
 const setHTML=(id,v)=>{const el=$(id);if(el)el.innerHTML=v;}
 const numOf=id=>Number((($(id)?.value)||'').replace(/,/g,'')||0);
 const floor10=n=>Math.floor(n/10)*10; // 10원 절사
 const fmt=n=>(Number.isFinite(n)?Math.floor(n).toLocaleString('ko-KR')+'원':'-');
-
-// 날짜 유틸
 const parseLocalDate=s=>{ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y, (m||1)-1, d||1); };
-const addDays=(date,days)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()+days); return d; };
+const addDays=(date,days)=>new Date(date.getFullYear(), date.getMonth(), date.getDate()+days);
 const addMonths=(date,months)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()); d.setMonth(d.getMonth()+months); if(d.getDate()!==date.getDate()){ d.setDate(0); } return d; };
 const formatYMD=d=>{ if(!d||Number.isNaN(+d)) return '-'; const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; };
-
-// 숫자 입력 3자리 콤마
-document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('num')){
+    let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');
+    if(v===''){e.target.value='';return;}
+    e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  }
+});
 </script>
 
 <script>
-// --- (2번) 상가 등 유상취득 계산기 ---
-const ACQ_RATE=0.04, NTS_RATE=0.002, EDU_RATE=0.004, TOTAL_RATE=ACQ_RATE+NTS_RATE+EDU_RATE;
+/* ===== (2) 상가 등 유상취득 ===== */
+const ACQ_RATE=0.04, NTS_RATE=0.002, EDU_RATE=0.004;
 function calc2(){
   const base=numOf('취득가액');
   const acq=floor10(base*ACQ_RATE), nts=floor10(base*NTS_RATE), edu=floor10(base*EDU_RATE);
@@ -534,20 +601,17 @@ function calc2(){
   const rows=[["취득세","4%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.4%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
   setHTML('tb',rows); setText('sumY',fmt(sum)); setText('sum_total',fmt(sum)); setText('과표',fmt(base));
   setText('sum_guide','취득(잔금지급일)일로부터 60일 내');
-
-  const payDateStr = $('잔금지급일')?.value || '';
-  let deadline='-';
+  const payDateStr = $('잔금지급일')?.value || ''; let deadline='-';
   if(payDateStr){ const d=parseLocalDate(payDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('납부기한', deadline);
 }
-document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')){ calc2(); }});
+document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')) calc2(); });
 </script>
 
 <script>
-// --- (3번) 상속 취득 계산기 ---
-const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008; // 특례 0.8%
+/* ===== (3) 상속 취득 ===== */
+const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008;
 const I_NTS_RATE=0.002, I_EDU_RATE=0.0016;
-
 function enforceTypeExclusive(changedId){
   const a=$('isHouse'), b=$('isNonHouse');
   if(changedId==='isHouse' && a?.checked){ if(b) b.checked=false; }
@@ -560,14 +624,10 @@ function refreshAreaOptions(){
   const showArea = !!$('isHouse')?.checked && !$('isNonHouse')?.checked;
   const areaBox = $('areaOptions');
   if(areaBox){ areaBox.classList.toggle('hidden', !showArea); }
-  if(!showArea){
-    const le = $('area_le_85'), gt = $('area_gt_85'), sp=$('one_home_special');
-    if(le) le.checked=false; if(gt) gt.checked=false; if(sp) sp.checked=false;
-  }
+  if(!showArea){ const le=$('area_le_85'), gt=$('area_gt_85'), sp=$('one_home_special'); if(le) le.checked=false; if(gt) gt.checked=false; if(sp) sp.checked=false; }
 }
 function toggleArea(exclusiveId){
-  const ids = ['area_le_85','area_gt_85'];
-  ids.forEach(id=>{ if(id!==exclusiveId){ const el=$(id); if(el) el.checked=false; } });
+  ['area_le_85','area_gt_85'].forEach(id=>{ if(id!==exclusiveId){ const el=$(id); if(el) el.checked=false; } });
   if(exclusiveId==='area_le_85'){ const sp=$('one_home_special'); if(sp) sp.checked=false; }
 }
 function calc3(){
@@ -575,24 +635,17 @@ function calc3(){
   const isHouse = $('isHouse')?.checked || false;
   const isNonHouse = $('isNonHouse')?.checked || false;
   const le85 = $('area_le_85')?.checked || false;
-  const gt85 = $('area_gt_85')?.checked || false;
   const special = $('one_home_special')?.checked || false;
 
-  // 농특세: 주택≤85 또는 특례 체크 시 미부과
-  let ntsRate = I_NTS_RATE;
-  let ntsRateLabel = '0.2%';
+  let ntsRate = I_NTS_RATE; let ntsRateLabel = '0.2%';
   if(isHouse && !isNonHouse && le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
   if(special){ ntsRate = 0; ntsRateLabel = '미부과'; }
 
-  // 취득세율: 특례 체크 시 무조건 0.8%
   let acqRate = I_ACQ_RATE_DEFAULT;
   if(special){ acqRate = I_ACQ_RATE_SPECIAL; }
   const acqRateLabel = (acqRate*100).toFixed(1) + '%';
 
-  // 산출
-  const acq=floor10(base*acqRate);
-  const nts=floor10(base*ntsRate);
-  const edu=floor10(base*I_EDU_RATE);
+  const acq=floor10(base*acqRate), nts=floor10(base*ntsRate), edu=floor10(base*I_EDU_RATE);
   const sum=acq+nts+edu;
 
   const rows=[["취득세",acqRateLabel,fmt(acq)],["농어촌특별세",ntsRateLabel,fmt(nts)],["지방교육세","0.16%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
@@ -602,58 +655,81 @@ function calc3(){
   setText('상속_과표',fmt(base));
   setText('상속_농특세율셀', ntsRateLabel);
   setText('상속_취득세율셀', acqRateLabel);
-  const totalRatePct = ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%';
-  setText('상속_합계세율표시', totalRatePct);
+  setText('상속_합계세율표시', ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%');
 
   setText('상속_sum_guide','사망일(상속개시일)로부터 6개월 내');
-  const deathStr = $('사망일')?.value || '';
-  let deadline='-';
+  const deathStr=$('사망일')?.value || ''; let deadline='-';
   if(deathStr){ const d=parseLocalDate(deathStr); if(d){ deadline = formatYMD(addMonths(d,6)); } }
   setText('상속_납부기한', deadline);
 }
-
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
-  if(id==='사망일'){ calc3(); }
-  if(id==='isHouse' || id==='isNonHouse'){
-    enforceTypeExclusive(id); refreshAreaOptions(); calc3();
-  }
+  if(id==='사망일') calc3();
+  if(id==='isHouse' || id==='isNonHouse'){ enforceTypeExclusive(id); refreshAreaOptions(); calc3(); }
   if(id==='area_le_85'){ if(e.target.checked) toggleArea('area_le_85'); calc3(); }
   if(id==='area_gt_85'){ if(e.target.checked) toggleArea('area_gt_85'); calc3(); }
-  if(id==='one_home_special'){ calc3(); }
+  if(id==='one_home_special') calc3();
 });
-
 document.addEventListener('DOMContentLoaded', ()=>{ refreshAreaOptions(); });
 </script>
 
 <script>
-// --- (4번) 증여 취득 계산기 ---
+/* ===== (4) 증여 취득 ===== */
 const G_ACQ_RATE=0.035, G_NTS_RATE=0.002, G_EDU_RATE=0.003; // 합계 4.0%
+function g_enforceTypeExclusive(changedId){
+  const a=$('g_isHouse'), b=$('g_isNonHouse');
+  if(changedId==='g_isHouse' && a?.checked){ if(b) b.checked=false; }
+  if(changedId==='g_isNonHouse' && b?.checked){ if(a) a.checked=false; }
+}
+function g_refreshAreaOptions(){
+  const isHouse = $('g_isHouse')?.checked;
+  const isNonHouse = $('g_isNonHouse')?.checked;
+  if(isHouse && isNonHouse){ $('g_isNonHouse').checked=false; }
+  const showArea = !!$('g_isHouse')?.checked && !$('g_isNonHouse')?.checked;
+  const areaBox = $('g_areaOptions');
+  if(areaBox){ areaBox.classList.toggle('hidden', !showArea); }
+  if(!showArea){ const le=$('g_area_le_85'), gt=$('g_area_gt_85'); if(le) le.checked=false; if(gt) gt.checked=false; }
+}
+function g_toggleArea(exclusiveId){
+  ['g_area_le_85','g_area_gt_85'].forEach(id=>{ if(id!==exclusiveId){ const el=$(id); if(el) el.checked=false; } });
+}
 function calc4(){
   const base=numOf('증여_과세표준');
-  const acq=floor10(base*G_ACQ_RATE);
-  const nts=floor10(base*G_NTS_RATE);
-  const edu=floor10(base*G_EDU_RATE);
+  const isHouse = $('g_isHouse')?.checked || false;
+  const isNonHouse = $('g_isNonHouse')?.checked || false;
+  const le85 = $('g_area_le_85')?.checked || false;
+
+  let ntsRate = G_NTS_RATE; let ntsRateLabel = '0.2%';
+  if(isHouse && !isNonHouse && le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
+
+  const acq=floor10(base*G_ACQ_RATE), nts=floor10(base*ntsRate), edu=floor10(base*G_EDU_RATE);
   const sum=acq+nts+edu;
 
-  const rows=[["취득세","3.5%",fmt(acq)],["농어촌특별세","0.2%",fmt(nts)],["지방교육세","0.3%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  const rows=[["취득세","3.5%",fmt(acq)],["농어촌특별세",ntsRateLabel,fmt(nts)],["지방교육세","0.3%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
   setHTML('증여_tb',rows);
   setText('증여_sumY',fmt(sum));
   setText('증여_sum_total',fmt(sum));
   setText('증여_과표',fmt(base));
+  setText('증여_농특세율셀', ntsRateLabel);
+  setText('증여_합계세율표시', ((G_ACQ_RATE + ntsRate + G_EDU_RATE)*100).toFixed(2) + '%');
 
   setText('증여_sum_guide','취득(증여일)로부터 60일 내');
-  const giftDateStr = $('증여일')?.value || '';
-  let deadline='-';
+  const giftDateStr = $('증여일')?.value || ''; let deadline='-';
   if(giftDateStr){ const d=parseLocalDate(giftDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('증여_납부기한', deadline);
 }
-
-document.addEventListener('change',e=>{ if(e.target && (e.target.id==='증여일')){ calc4(); }});
+document.addEventListener('change',e=>{
+  const id = e.target?.id || '';
+  if(id==='증여일') calc4();
+  if(id==='g_isHouse' || id==='g_isNonHouse'){ g_enforceTypeExclusive(id); g_refreshAreaOptions(); calc4(); }
+  if(id==='g_area_le_85'){ if(e.target.checked) g_toggleArea('g_area_le_85'); calc4(); }
+  if(id==='g_area_gt_85'){ if(e.target.checked) g_toggleArea('g_area_gt_85'); calc4(); }
+});
+document.addEventListener('DOMContentLoaded', ()=>{ g_refreshAreaOptions(); });
 </script>
 
 <script>
-// --- PWA 설치 로직 ---
+/* ===== PWA 설치 ===== */
 let deferredPrompt=null;
 function isStandalone(){
   try{
@@ -684,48 +760,28 @@ try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', 
 </script>
 
 <script>
-// ===== 미리보기 로직 (문구/닫기 없음) =====
+/* ===== 미리보기 ===== */
 function getActiveView(){
   const v = Array.from(document.querySelectorAll('.view')).find(el=>!el.classList.contains('hidden'));
   return v || document.getElementById('view-menu');
 }
 function openOnePagePreview(){
-  try{ calc2(); }catch(e){}
-  try{ calc3(); }catch(e){}
-  try{ calc4(); }catch(e){}
-
-  const overlay = $('previewOverlay');
-  const page = $('previewPage');
-  const content = $('previewContent');
+  try{ calc2(); }catch(e){} try{ calc3(); }catch(e){} try{ calc4(); }catch(e){}
+  const overlay = $('previewOverlay'), page = $('previewPage'), content = $('previewContent');
   if(!overlay||!page||!content) return;
-
-  const active = getActiveView();
-  const clone = active.cloneNode(true);
-  clone.setAttribute('data-preview','1');
-
-  const holder = document.createElement('div');
-  holder.className = 'preview-scale';
-  holder.appendChild(clone);
-  content.innerHTML='';
-  content.appendChild(holder);
-
-  overlay.classList.add('show');
-  requestAnimationFrame(fitPreviewScale);
+  const active = getActiveView(); const clone = active.cloneNode(true); clone.setAttribute('data-preview','1');
+  const holder = document.createElement('div'); holder.className='preview-scale'; holder.appendChild(clone);
+  content.innerHTML=''; content.appendChild(holder);
+  overlay.classList.add('show'); requestAnimationFrame(fitPreviewScale);
 }
 function fitPreviewScale(){
-  const page = $('previewPage');
-  const content = $('previewContent');
-  const holder = content && content.querySelector('.preview-scale');
-  if(!page || !content || !holder) return;
-
-  const targetW = page.clientWidth - 24;
-  const targetH = page.clientHeight - 24;
-
-  holder.style.transform = 'scale(1)';
+  const page = $('previewPage'), content = $('previewContent');
+  const holder = content && content.querySelector('.preview-scale'); if(!page||!content||!holder) return;
+  const targetW = page.clientWidth - 24, targetH = page.clientHeight - 24;
+  holder.style.transform='scale(1)';
   const naturalW = holder.scrollWidth || holder.offsetWidth || targetW;
   const naturalH = holder.scrollHeight || holder.offsetHeight || targetH;
-  const scale = Math.min(targetW / naturalW, targetH / naturalH, 1);
-  holder.style.transform = `scale(${scale})`;
+  const scale = Math.min(targetW / naturalW, targetH / naturalH, 1); holder.style.transform = `scale(${scale})`;
 }
 window.addEventListener('resize', fitPreviewScale);
 </script>
