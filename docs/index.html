@@ -6,8 +6,8 @@
 <title>취득세 계산 · 메뉴</title>
 <meta name="theme-color" content="#2c58ff" />
 <link rel="manifest" href="manifest.webmanifest?v=20250916">
-<link rel="icon" href="./icon-192-v7.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="./icon-512-v7.png" />
+<link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
 :root{
   --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
@@ -48,15 +48,8 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system
 #splash h1{font-size:1.35rem;margin:0;color:#0f172a;font-weight:900;letter-spacing:-0.01em}
 #splash .sub{font-size:.9rem;color:#334155}
 
-#splash .bar{
-  width:min(340px, 80vw); height:6px; border-radius:999px;
-  background:rgba(15,23,42,.12); overflow:hidden; box-shadow:inset 0 0 0 1px rgba(15,23,42,.06);
-}
-#splash .bar > i{
-  display:block; height:100%; width:0%;
-  background:linear-gradient(90deg, var(--splash-accent), #4f46e5);
-  animation: loadGrow 1.3s linear forwards;
-}
+#splash .bar{ width:min(340px, 80vw); height:6px; border-radius:999px; background:rgba(15,23,42,.12); overflow:hidden; box-shadow:inset 0 0 0 1px rgba(15,23,42,.06) }
+#splash .bar > i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--splash-accent), #4f46e5); animation: loadGrow 1.3s linear forwards }
 @keyframes loadGrow{ to{ width:100% } }
 
 /* 공통 헤더 */
@@ -109,6 +102,27 @@ input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d
 tfoot tr{background:var(--sum-bg);font-weight:700}
 .sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700}
 
+/* 입력 그리드 / 날짜 */
+#view-calc2 .input-grid,#view-calc3 .input-grid,#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
+#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
+#view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
+.deadline-box .label{font-size:.78rem;color:#374151}
+.deadline-box .value{font-size:1.03rem;font-weight:700}
+
+/* 아이콘칩 & 체크박스 */
+#view-calc3 .area-options,#view-calc4 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
+.icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow);width:fit-content} /* ← 내용만큼만 */
+.icon-chip.sky{background:var(--sky);border-color:#bae6fd}
+.icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
+.icon-chip.green{background:var(--green);border-color:var(--green-line)}
+.icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
+.icon-chip .sep{opacity:.6}
+.sep{opacity:.6}
+#view-calc3 .type-options label span,#view-calc4 .type-options label span,
+#view-calc3 .area-options label span,#view-calc4 .area-options label span{ color:#111827;font-size:1.0rem;font-weight:800; }
+#view-calc3 input[type="checkbox"],#view-calc4 input[type="checkbox"]{ width:16px;height:16px;accent-color:#111827 }
+
 /* calc3 라벨 가운데 */
 #view-calc3 .input-grid .col-amount label,#view-calc3 .input-grid .col-date label{ text-align:center }
 
@@ -118,12 +132,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 #view-calc4 details .table td,#view-calc4 details .table th{ text-align:center }
 #view-calc2 details .table td,#view-calc3 details .table td,#view-calc4 details .table td{ width:50% }
 
-/* 경고문 */
-.warn{color:var(--warn);font-size:0.83rem;margin-top:8px;text-align:right}
-.sum-box .label{font-size:0.76rem;color:#374151}
-.sum-box .value{font-size:1.08rem}
-.sum-box .value.note{font-size:0.73rem}
-.center-30{width:60%;min-width:420px;max-width:680px;margin:14px auto 0 auto}
+/* 증여 view: '세율 및 과세표준'과 항목 굵게 */
+#view-calc4 details summary{ font-weight:900 }
+#view-calc4 details .table td,#view-calc4 details .table th{ font-weight:800 }
+
+/* 증여 view: 버튼 밑 간이 합계 표시 */
+.quick-sum{ display:none; margin:10px auto 0 auto; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
+.quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem }
+.quick-sum .value{ font-size:1.08rem }
 
 /* 인쇄 최적화 */
 @media print{
@@ -137,25 +153,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   .table th,.table td{padding:5px}
   .title{margin:4px 0 8px 0;font-size:16pt}
 }
-#view-calc2 .input-grid,#view-calc3 .input-grid,#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
-#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
-#view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
-.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
-.deadline-box .label{font-size:.78rem;color:#374151}
-.deadline-box .value{font-size:1.03rem;font-weight:700}
-
-/* 아이콘칩 & 체크박스 */
-#view-calc3 .area-options,#view-calc4 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
-.icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow)}
-.icon-chip.sky{background:var(--sky);border-color:#bae6fd}
-.icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
-.icon-chip.green{background:var(--green);border-color:var(--green-line)}
-.icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
-.icon-chip .sep{opacity:.6}
-.sep{opacity:.6}
-#view-calc3 .type-options label span,#view-calc4 .type-options label span,
-#view-calc3 .area-options label span,#view-calc4 .area-options label span{ color:#111827;font-size:1.0rem;font-weight:800; }
-#view-calc3 input[type="checkbox"],#view-calc4 input[type="checkbox"]{ width:16px;height:16px;accent-color:#111827 }
 
 /* PWA 모드 */
 @media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){
@@ -189,16 +186,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     <div class="card" aria-hidden="true">
       <!-- 간단한 일러스트: 집 + 서류 + 계산기 (SVG) -->
       <svg class="art" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- 집 -->
         <path d="M12 48 L48 22 L84 48" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <rect x="22" y="48" width="24" height="26" rx="3" fill="none" stroke="#1f2937" stroke-width="2"/>
         <rect x="30" y="58" width="8" height="16" rx="1.5" fill="none" stroke="#1f2937" stroke-width="2"/>
-        <!-- 서류 -->
         <rect x="55" y="50" width="18" height="22" rx="2.5" fill="white" stroke="#2563eb" stroke-width="2"/>
         <line x1="59" y1="56" x2="71" y2="56" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
         <line x1="59" y1="61" x2="71" y2="61" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
         <line x1="59" y1="66" x2="71" y2="66" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-        <!-- 계산기 -->
         <rect x="6" y="58" width="16" height="18" rx="2.5" fill="white" stroke="#22c55e" stroke-width="2"/>
         <circle cx="11" cy="63" r="1.7" fill="#22c55e"/>
         <circle cx="17" cy="63" r="1.7" fill="#22c55e"/>
@@ -207,7 +201,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </svg>
       <div class="title-wrap">
         <h1>취득세 계산</h1>
-        <div class="sub">주택/상가/상속/증여 지원</div>
+        <div class="sub">주택/상가/상속/증여</div>
       </div>
     </div>
     <div class="bar" aria-hidden="true"><i></i></div>
@@ -487,7 +481,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <input id="증여일" type="date" class="date" />
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc4()">✍️ 계산하기</button></div>
+
+          <div style="margin-top:14px;text-align:center">
+            <button class="btn" onclick="calc4()">✍️ 계산하기</button>
+            <div id="증여_quick_sum" class="quick-sum" role="status" aria-live="polite">
+              <span class="label">총 합계 세액</span><span id="증여_quick_sum_value" class="value">-</span>
+            </div>
+          </div>
+
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
             <table class="table nowrap">
@@ -504,6 +505,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
           </details>
         </div>
+
         <div class="card">
           <h2>2. 산출 세액</h2>
           <div class="sum-box" role="status" aria-live="polite">
@@ -566,7 +568,7 @@ window.addEventListener('load',()=>{
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
     showView(initial, false);
     try{ history.replaceState({view:initial}, '', '#'+initial); }catch(e){}
-  },1300);
+  },3000);
 });
 </script>
 
@@ -641,26 +643,15 @@ function calc3(){
   if(isHouse && !isNonHouse && le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
   if(special){ ntsRate = 0; ntsRateLabel = '미부과'; }
 
-  let acqRate = I_ACQ_RATE_DEFAULT;
-  if(special){ acqRate = I_ACQ_RATE_SPECIAL; }
-  const acqRateLabel = (acqRate*100).toFixed(1) + '%';
-
+  let acqRate = I_ACQ_RATE_DEFAULT; if(special){ acqRate = I_ACQ_RATE_SPECIAL; }
   const acq=floor10(base*acqRate), nts=floor10(base*ntsRate), edu=floor10(base*I_EDU_RATE);
   const sum=acq+nts+edu;
-
-  const rows=[["취득세",acqRateLabel,fmt(acq)],["농어촌특별세",ntsRateLabel,fmt(nts)],["지방교육세","0.16%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
-  setHTML('상속_tb',rows);
-  setText('상속_sumY',fmt(sum));
-  setText('상속_sum_total',fmt(sum));
-  setText('상속_과표',fmt(base));
-  setText('상속_농특세율셀', ntsRateLabel);
-  setText('상속_취득세율셀', acqRateLabel);
+  const rows=[["취득세",(acqRate*100).toFixed(1)+'%',fmt(acq)],["농어촌특별세",ntsRateLabel,fmt(nts)],["지방교육세","0.16%",fmt(edu)]].map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join('');
+  setHTML('상속_tb',rows); setText('상속_sumY',fmt(sum)); setText('상속_sum_total',fmt(sum)); setText('상속_과표',fmt(base));
+  setText('상속_농특세율셀', ntsRateLabel); setText('상속_취득세율셀', (acqRate*100).toFixed(1)+'%');
   setText('상속_합계세율표시', ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%');
-
   setText('상속_sum_guide','사망일(상속개시일)로부터 6개월 내');
-  const deathStr=$('사망일')?.value || ''; let deadline='-';
-  if(deathStr){ const d=parseLocalDate(deathStr); if(d){ deadline = formatYMD(addMonths(d,6)); } }
-  setText('상속_납부기한', deadline);
+  const deathStr=$('사망일')?.value || ''; let deadline='-'; if(deathStr){ const d=parseLocalDate(deathStr); if(d){ deadline = formatYMD(addMonths(d,6)); } } setText('상속_납부기한', deadline);
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
@@ -699,6 +690,7 @@ function calc4(){
   const isNonHouse = $('g_isNonHouse')?.checked || false;
   const le85 = $('g_area_le_85')?.checked || false;
 
+  // 농특세: 주택 & 전용면적 ≤85m² 체크 시 미부과
   let ntsRate = G_NTS_RATE; let ntsRateLabel = '0.2%';
   if(isHouse && !isNonHouse && le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
 
@@ -713,10 +705,15 @@ function calc4(){
   setText('증여_농특세율셀', ntsRateLabel);
   setText('증여_합계세율표시', ((G_ACQ_RATE + ntsRate + G_EDU_RATE)*100).toFixed(2) + '%');
 
+  // 납부기한/안내
   setText('증여_sum_guide','취득(증여일)로부터 60일 내');
   const giftDateStr = $('증여일')?.value || ''; let deadline='-';
   if(giftDateStr){ const d=parseLocalDate(giftDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('증여_납부기한', deadline);
+
+  // 버튼 아래 간이 합계 표시
+  const quick = $('증여_quick_sum'); const quickV = $('증여_quick_sum_value');
+  if(quick && quickV){ quick.style.display='inline-flex'; quickV.textContent = fmt(sum); }
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
