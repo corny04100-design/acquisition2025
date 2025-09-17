@@ -9,12 +9,7 @@
 <link rel="icon" href="./icon-192-v5.png" sizes="192x192" />
 <link rel="apple-touch-icon" href="./icon-512-v5.png" />
 <style>
-:root{
-  --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
-  --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
-  --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
-  --warn:#dc2626; --muted:#9ca3af;
-}
+:root{ --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280; --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6; --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06); --warn:#dc2626; --muted:#9ca3af; --sky:#e0f2fe; --yellow:#fef9c3; }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
 .hidden{display:none !important}
 
@@ -38,10 +33,6 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
 .btn:hover{filter:brightness(1.05)}
 
-/* 스플래시 */
-#splash{position:fixed;inset:0;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;color:#fff;z-index:100}
-#splash h1{font-size:1.9rem;letter-spacing:.08em}
-
 /* 메뉴 */
 #view-menu .menu-wrap{max-width:640px;margin:0 auto}
 .menu-grid{display:grid;grid-template-columns:1fr;gap:13px}
@@ -56,7 +47,7 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 .menu-text{font-size:1rem;font-weight:700}
 .menu-note{font-size:.83rem;color:var(--text-sub)}
 
-/* 표/입력(2/3번 화면에서 사용) */
+/* 표/입력 */
 .grid{display:grid;grid-template-columns:50% 50%;gap:18px}
 #view-calc2 .grid,#view-calc3 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -95,32 +86,22 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
 .deadline-box .label{font-size:.78rem;color:#374151}
 .deadline-box .value{font-size:1.03rem;font-weight:700}
-#view-calc3 .type-options{display:flex;gap:14px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:9px}
-#view-calc3 .type-options.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
-#view-calc3 .area-options{gap:9px;margin:5px 0 7px 0}
-.pill{padding:9px 10px;gap:14px}
 
-/* 미리보기 오버레이 */
-#previewOverlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
-#previewOverlay.show{display:flex}
-.preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:11px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:7px}
-.preview-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between}
-.preview-toolbar .left{display:flex;gap:6px;align-items:center}
-.preview-toolbar .right{display:flex;gap:6px;align-items:center}
-.preview-toolbar .btn{padding:7px 11px;border-radius:8px;background:var(--brand);color:#fff}
-.preview-toolbar .btn.secondary{background:#334155}
-.preview-page-wrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto}
-.preview-page{width:794px;height:1123px;border:1px solid #e5e7eb;box-shadow:0 6px 20px rgba(0,0,0,.08);background:#fff;transform-origin:top left;position:relative}
-.preview-content{position:absolute;inset:0;overflow:hidden;padding:11px}
-.preview-content .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
-.preview-content .grid{grid-template-columns:1fr 1fr !important;gap:7px !important}
-.preview-content .card{padding:9px !important}
-.preview-content .sum-box{margin:5px 0 !important;padding:9px !important}
-.preview-content .table{font-size:10pt !important}
-.preview-content .table th,.preview-content .table td{padding:5px !important}
-.preview-content .title{margin:3px 0 7px 0 !important;font-size:16pt !important}
-.preview-content header.appbar,.preview-content .app-actions,.preview-content #splash,.preview-content .menu-wrap{display:none !important}
-.preview-scale{transform-origin: top left; display:inline-block;}
+/* === 아이콘칩(전용면적/특례) === */
+#view-calc3 .area-options{display:flex;flex-direction:column;gap:9px;margin:6px 0 8px 0}
+.icon-chip{display:inline-flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow)}
+.icon-chip.sky{background:var(--sky);border-color:#bae6fd}
+.icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
+.icon-chip label{display:inline-flex;align-items:center;gap:8px;margin:0}
+.icon-chip .sep{opacity:.6}
+
+/* === 요청: 체크박스+문구 강조 === */
+#view-calc3 .type-options label span,
+#view-calc3 .area-options label span{color:#111827;font-size:1.1rem;font-weight:800}
+#view-calc3 input[type="checkbox"]{width:18px;height:18px;accent-color:#111827}
+
+/* PWA 모드에서 설치 버튼 숨김 */
+@media all and (display-mode: standalone), all and (display-mode: window-controls-overlay){ .btn-install{display:none !important} }
 </style>
 </head>
 <body>
@@ -288,23 +269,27 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택">
-            <label><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
-            <label><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
+          <div class="type-options box" id="typeOptions" role="group" aria-label="상속 취득 유형 선택" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:14px;flex-wrap:wrap;">
+            <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="isHouse"/> <span>1. 주택</span></label>
+            <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="isNonHouse"/> <span>2. 주택이 아닌 부동산</span></label>
           </div>
 
           <div id="areaOptions" class="area-options hidden" aria-live="polite">
-            <div class="pill green" id="areaBox" role="group" aria-label="전용면적 선택">
+            <!-- 전용면적 아이콘칩 (하늘색 옅은 배경) -->
+            <div class="icon-chip sky" id="areaBox" role="group" aria-label="전용면적 선택">
               <label><input type="checkbox" id="area_le_85" /> <span>전용면적 85m² 이하</span></label>
+              <span class="sep">|</span>
               <label><input type="checkbox" id="area_gt_85" /> <span>전용면적 85m² 초과</span></label>
             </div>
-            <div class="pill sky" id="specialBox" role="group" aria-label="세율 특례 선택">
-              <label title="체크 시 취득세율 0.8% 적용 및 농어촌특별세 미부과">
+            <!-- 세율 특례 아이콘박스 (노랑 옅은 배경) -->
+            <div class="icon-chip yellow" id="specialBox" role="group" aria-label="세율 특례 선택" title="체크 시 취득세율 0.8% 적용 및 농어촌특별세 미부과">
+              <label>
                 <input type="checkbox" id="one_home_special" />
-                <span class="special-tight">1가구1주택 세율특례대상(판단순서 ①지분이 가장 큰 자 ②상속주택 거주자 ③연장자)</span>
+                <span>1가구1주택 세율특례대상(판단순서 ①지분이 가장 큰 자 ②상속주택 거주자 ③연장자)</span>
               </label>
             </div>
           </div>
+
           <div class="input-grid">
             <div class="col col-amount">
               <label for="상속_과세표준">과세표준(주택공시가격 또는 건물·토지 시가표준액)</label>
@@ -355,15 +340,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- ====== 한페이지 미리보기 오버레이 ====== -->
+  <!-- ====== 한페이지 미리보기 오버레이 (닫기 버튼 없음) ====== -->
   <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="한페이지 미리보기">
     <div class="preview-card">
       <div class="preview-toolbar">
         <div class="left"><strong>한페이지 미리보기</strong></div>
-        <div class="right">
-          <button class="btn secondary" onclick="closeOnePagePreview()">닫기</button>
-          <!-- 인쇄 버튼은 제거됨 -->
-        </div>
+        <div class="right"><!-- 닫기 버튼 없음 --></div>
       </div>
       <div class="preview-page-wrap">
         <div class="preview-page" id="previewPage">
@@ -382,13 +364,10 @@ function showView(name, push = true){
     if(push){ try{ history.pushState({view:name}, '', '#'+name); }catch(e){} }
   }
 }
-
-// 뒤로가기 시 이전 화면으로 복귀
 window.addEventListener('popstate', (event)=>{
   const view = (event.state && event.state.view) || (location.hash ? location.hash.replace('#','') : 'menu');
   showView(view, false);
 });
-
 window.addEventListener('load',()=>{
   setTimeout(()=>{
     const sp=document.getElementById('splash'); if(sp) sp.classList.add('hidden');
@@ -414,7 +393,6 @@ const addDays=(date,days)=>{ const d=new Date(date.getFullYear(), date.getMonth(
 const addMonths=(date,months)=>{ const d=new Date(date.getFullYear(), date.getMonth(), date.getDate()); d.setMonth(d.getMonth()+months); if(d.getDate()!==date.getDate()){ d.setDate(0); } return d; };
 const formatYMD=d=>{ if(!d||Number.isNaN(+d)) return '-'; const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; };
 
-// 숫자 입력 3자리 콤마
 document.addEventListener('input',e=>{if(e.target.classList.contains('num')){let v=e.target.value.replace(/,/g,'').replace(/[^\d]/g,'');if(v===''){e.target.value='';return;}e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");}});
 </script>
 
@@ -439,7 +417,7 @@ document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지
 
 <script>
 // --- (3번) 상속 취득 계산기 ---
-const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008;
+const I_ACQ_RATE_DEFAULT=0.028, I_ACQ_RATE_SPECIAL=0.008; // 특례 0.8%
 const I_NTS_RATE=0.002, I_EDU_RATE=0.0016;
 
 function enforceTypeExclusive(changedId){
@@ -472,18 +450,20 @@ function calc3(){
   const gt85 = $('area_gt_85')?.checked || false;
   const special = $('one_home_special')?.checked || false;
 
+  // --- 농특세 계산 ---
   let ntsRate = I_NTS_RATE;
   let ntsRateLabel = '0.2%';
   if(isHouse && !isNonHouse){
     if(le85){ ntsRate = 0; ntsRateLabel = '미부과'; }
-    else { ntsRate = I_NTS_RATE; ntsRateLabel = '0.2%'; }
-  }else{ ntsRate = I_NTS_RATE; ntsRateLabel = '0.2%'; }
+  }
   if(special){ ntsRate = 0; ntsRateLabel = '미부과'; }
 
+  // --- 취득세율 계산: 특례 체크 시 무조건 0.8% ---
   let acqRate = I_ACQ_RATE_DEFAULT;
-  if(isHouse && !isNonHouse && gt85 && special){ acqRate = I_ACQ_RATE_SPECIAL; }
+  if(special){ acqRate = I_ACQ_RATE_SPECIAL; }
   const acqRateLabel = (acqRate*100).toFixed(1) + '%';
 
+  // 산출
   const acq=floor10(base*acqRate);
   const nts=floor10(base*ntsRate);
   const edu=floor10(base*I_EDU_RATE);
@@ -550,78 +530,38 @@ async function openInstall(){
 ['load','pageshow','visibilitychange'].forEach(evt=>{ window.addEventListener(evt, updateInstallUI); });
 try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', updateInstallUI); }catch(e){}
 </script>
-<script>
-// [보강] 설치 후 버튼 잔존시 강제 숨김
-(function(){
-  const LS_KEY='pwaInstalled';
-  function _isStandalone(){ try{ return window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: window-controls-overlay)').matches || window.navigator.standalone === true; }catch(e){ return false; } }
-  function hideInstallButtons(){ document.querySelectorAll('.btn-install').forEach(el=>{ el.style.display='none'; }); document.body.classList.add('installed'); }
-  function update(){ if(_isStandalone() || localStorage.getItem(LS_KEY)==='1'){ hideInstallButtons(); } }
-  update();
-  document.addEventListener('DOMContentLoaded', update);
-  window.addEventListener('pageshow', update);
-  window.addEventListener('visibilitychange', update);
-  try{ window.matchMedia('(display-mode: standalone)').addEventListener?.('change', update); window.matchMedia('(display-mode: window-controls-overlay)').addEventListener?.('change', update); }catch(e){}
-  window.addEventListener('appinstalled', ()=>{ localStorage.setItem(LS_KEY,'1'); update(); });
-  const _openInstall = window.openInstall; window.openInstall = function(){ try{ if(typeof _openInstall === 'function'){ const ret = _openInstall(); try{ setTimeout(update, 1000); }catch(e){} return ret; } }catch(e){} };
-})();
-</script>
 
 <script>
-// ===== 한페이지 미리보기 로직 (전체가 한 장에 안 잘리게) =====
+// ===== 한페이지 미리보기 로직 (닫기 버튼 없음) =====
 function getActiveView(){
   const v = Array.from(document.querySelectorAll('.view')).find(el=>!el.classList.contains('hidden'));
   return v || document.getElementById('view-menu');
 }
-
 function openOnePagePreview(){
   try{ calc2(); }catch(e){}
   try{ calc3(); }catch(e){}
-
-  const overlay = $('previewOverlay');
-  const page = $('previewPage');
-  const content = $('previewContent');
+  const overlay = document.getElementById('previewOverlay');
+  const page = document.getElementById('previewPage');
+  const content = document.getElementById('previewContent');
   if(!overlay||!page||!content) return;
-
   const active = getActiveView();
   const clone = active.cloneNode(true);
   clone.setAttribute('data-preview','1');
-
   const holder = document.createElement('div');
   holder.className = 'preview-scale';
   holder.appendChild(clone);
   content.innerHTML='';
   content.appendChild(holder);
-
   overlay.classList.add('show');
-  requestAnimationFrame(fitPreviewScale);
+  requestAnimationFrame(()=>{
+    const targetW = page.clientWidth - 24, targetH = page.clientHeight - 24;
+    holder.style.transform = 'scale(1)';
+    const naturalW = holder.scrollWidth || holder.offsetWidth || targetW;
+    const naturalH = holder.scrollHeight || holder.offsetHeight || targetH;
+    const scale = Math.min(targetW/naturalW, targetH/naturalH, 1);
+    holder.style.transform = `scale(${scale})`;
+  });
 }
-
-function closeOnePagePreview(){
-  const overlay = $('previewOverlay');
-  if(overlay){ overlay.classList.remove('show'); }
-}
-
-function fitPreviewScale(){
-  const page = $('previewPage');
-  const content = $('previewContent');
-  const holder = content && content.querySelector('.preview-scale');
-  if(!page || !content || !holder) return;
-
-  const targetW = page.clientWidth - 24; // 12px 패딩*2 제외
-  const targetH = page.clientHeight - 24;
-
-  holder.style.transform = 'scale(1)'; // 측정 전 초기화
-
-  // 자연 크기 측정 (가로: scrollWidth, 세로: scrollHeight)
-  const naturalW = holder.scrollWidth || holder.offsetWidth || targetW;
-  const naturalH = holder.scrollHeight || holder.offsetHeight || targetH;
-
-  const scale = Math.min(targetW / naturalW, targetH / naturalH, 1);
-  holder.style.transform = `scale(${scale})`;
-}
-
-window.addEventListener('resize', fitPreviewScale);
 </script>
 </body>
 </html>
