@@ -20,7 +20,7 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system
 
 /* 공통 헤더 */
 header.appbar{position:sticky;top:0;z-index:50;background:var(--card);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px var(--shadow)}
-header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
+header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:0.95rem;white-space:nowrap}
 .brand .logo{display:none}
 .app-actions{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap}
@@ -32,10 +32,10 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .installed .btn-install{display:none !important}
 
 /* 공통 레이아웃 */
-.wrap{max-width:960px;margin:20px auto 80px;padding:0 16px}
-.title{font-size:1.3rem;font-weight:800;margin-bottom:10px;text-align:center}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 4px 12px var(--shadow)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
+.wrap{max-width:960px;margin:18px auto 72px;padding:0 16px}
+.title{font-size:1.3rem;font-weight:800;margin-bottom:9px;text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 4px 12px var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
 .btn:hover{filter:brightness(1.05)}
 
 /* 스플래시 */
@@ -44,8 +44,8 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 
 /* 메뉴 */
 #view-menu .menu-wrap{max-width:640px;margin:0 auto}
-.menu-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.menu-item{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 12px var(--shadow);cursor:pointer;text-decoration:none;color:inherit}
+.menu-grid{display:grid;grid-template-columns:1fr;gap:13px}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 12px var(--shadow);cursor:pointer;text-decoration:none;color:inherit}
 .menu-item:hover{background:#f8fafc}
 /* 2번(준비 완료) 기본 강조 */
 .menu-item.ready{background:#fef2f2;border-color:#fecaca}
@@ -59,28 +59,28 @@ header .row{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-i
 .menu-note{font-size:.85rem;color:var(--text-sub)}
 
 /* 표/입력(2/3번 화면에서 사용) */
-.grid{display:grid;grid-template-columns:50% 50%;gap:20px}
+.grid{display:grid;grid-template-columns:50% 50%;gap:18px}
 #view-calc2 .grid{grid-template-columns:1fr !important}
 #view-calc3 .grid{grid-template-columns:1fr !important}
-.header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
 h2{font-size:1.05rem;margin:0}
 h2 .unit{font-size:0.75rem;color:var(--text-sub)}
-label{font-size:0.9rem;color:var(--text-sub);margin-bottom:4px;display:block}
+label{font-size:0.9rem;color:var(--text-sub);margin-bottom:3px;display:block}
 /* 숫자 입력 공통: 70% */
-input.num{width:70%;display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:var(--input-bg);text-align:right;font-size:1rem}
-.table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.9rem}
-.table th,.table td{padding:10px;border-bottom:1px solid var(--line)}
+input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:var(--input-bg);text-align:right;font-size:1rem}
+.table{width:100%;border-collapse:collapse;margin-top:9px;font-size:0.9rem}
+.table th,.table td{padding:9px;border-bottom:1px solid var(--line)}
 .table th{text-align:center;background:var(--bg)}
 .table td{text-align:right}
 .table td:first-child{text-align:center}
 tfoot tr{background:var(--sum-bg);font-weight:700}
-.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin:12px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center;font-weight:700}
-.warn{color:var(--warn);font-size:0.85rem;margin-top:10px;text-align:right}
+.sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:11px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center;font-weight:700}
+.warn{color:var(--warn);font-size:0.85rem;margin-top:9px;text-align:right}
 .sum-box .label{font-size:0.78rem;color:#374151}
 .sum-box .value{font-size:1.125rem}
 .sum-box .value.note{font-size:0.75rem}
 .nowrap{white-space:nowrap}
-.center-30{width:60%;min-width:420px;max-width:680px;margin:16px auto 0 auto}
+.center-30{width:60%;min-width:420px;max-width:680px;margin:14px auto 0 auto}
 .nowrap td,.nowrap th{white-space:nowrap}
 /* 모든 한글 문구 중앙 정렬 */
 .title,.brand,.header-row h2,label,summary,.warn,.sum-box .label,.sum-box .value{ text-align:center; }
@@ -91,21 +91,21 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   @page{size:A4 portrait;margin:10mm}
   body{font-size:11pt}
   .wrap{max-width:100%;margin:0;padding:0}
-  .grid{grid-template-columns:1fr 1fr;gap:8px}
-  .card{padding:10px;box-shadow:none;border-color:#e5e7eb}
-  .sum-box{margin:6px 0;padding:10px}
+  .grid{grid-template-columns:1fr 1fr;gap:7px}
+  .card{padding:9px;box-shadow:none;border-color:#e5e7eb}
+  .sum-box{margin:5px 0;padding:9px}
   .table{font-size:10pt}
-  .table th,.table td{padding:6px}
-  .title{margin:4px 0 8px 0;font-size:16pt}
+  .table th,.table td{padding:5px}
+  .title{margin:3px 0 7px 0;font-size:16pt}
   header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
   /* 인쇄 중 잘림 방지 */
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .card, .grid, .table, .sum-box { page-break-inside: avoid; }
 }
-#view-calc2 .input-grid, #view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px;align-items:end;margin-bottom:12px}
+#view-calc2 .input-grid, #view-calc3 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:11px;align-items:end;margin-bottom:11px}
 #view-calc2 .input-grid input.num, #view-calc3 .input-grid input.num{width:70%}
-#view-calc2 input.date, #view-calc3 input.date{display:block;margin:0 auto;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
-.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:12px;text-align:center}
+#view-calc2 input.date, #view-calc3 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+.deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:11px;text-align:center}
 .deadline-box .label{font-size:.8rem;color:#374151}
 .deadline-box .value{font-size:1.05rem;font-weight:700}
 
@@ -115,14 +115,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 }
 
 /* 상속 취득 체크박스 + 박스 스타일 */
-#view-calc3 .type-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:10px}
+#view-calc3 .type-options{display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:9px}
 #view-calc3 .type-options.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 #view-calc3 .type-options label{display:inline-flex;align-items:center;gap:6px;text-align:left !important}
-#view-calc3 .area-options{display:flex;flex-direction:column;gap:10px;justify-content:flex-start;flex-wrap:nowrap;margin:6px 0 8px 0}
+#view-calc3 .area-options{display:flex;flex-direction:column;gap:9px;justify-content:flex-start;flex-wrap:nowrap;margin:5px 0 7px 0}
 #view-calc3 .area-options label{display:inline-flex;align-items:center;gap:6px}
 #view-calc3 .type-options label span,
 #view-calc3 .area-options label span{color:var(--text);font-weight:800;font-size:1.05rem}
-.pill{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.pill{border:1px solid var(--line);border-radius:12px;padding:9px 11px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
 .pill.green{background:#ecfdf5;border-color:#bbf7d0}
 .pill.sky{background:#e0f2fe;border-color:#bae6fd}
 .pill label{margin:2px 0}
@@ -131,23 +131,23 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 /* ===== 미리보기 오버레이 (한페이지 맞춤) ===== */
 #previewOverlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
 #previewOverlay.show{display:flex}
-.preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:12px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:8px}
+.preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:11px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:7px}
 .preview-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between}
 .preview-toolbar .left{display:flex;gap:6px;align-items:center}
 .preview-toolbar .right{display:flex;gap:6px;align-items:center}
-.preview-toolbar .btn{padding:8px 12px;border-radius:8px;background:var(--brand);color:#fff}
+.preview-toolbar .btn{padding:7px 11px;border-radius:8px;background:var(--brand);color:#fff}
 .preview-toolbar .btn.secondary{background:#334155}
 .preview-page-wrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto}
 .preview-page{width:794px;height:1123px;border:1px solid #e5e7eb;box-shadow:0 6px 20px rgba(0,0,0,.08);background:#fff;transform-origin:top left;position:relative}
-.preview-content{position:absolute;inset:0;overflow:hidden;padding:12px}
+.preview-content{position:absolute;inset:0;overflow:hidden;padding:11px}
 /* 미리보기 전용 조밀 모드 */
 .preview-content .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
-.preview-content .grid{grid-template-columns:1fr 1fr !important;gap:8px !important}
-.preview-content .card{padding:10px !important}
-.preview-content .sum-box{margin:6px 0 !important;padding:10px !important}
+.preview-content .grid{grid-template-columns:1fr 1fr !important;gap:7px !important}
+.preview-content .card{padding:9px !important}
+.preview-content .sum-box{margin:5px 0 !important;padding:9px !important}
 .preview-content .table{font-size:10pt !important}
-.preview-content .table th,.preview-content .table td{padding:6px !important}
-.preview-content .title{margin:4px 0 8px 0 !important;font-size:16pt !important}
+.preview-content .table th,.preview-content .table td{padding:5px !important}
+.preview-content .title{margin:3px 0 7px 0 !important;font-size:16pt !important}
 .preview-content header.appbar,.preview-content .app-actions,.preview-content #splash,.preview-content .menu-wrap{display:none !important}
 /* 스케일 컨테이너 */
 .preview-scale{transform-origin: top left; display:inline-block;}
@@ -233,15 +233,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         </a>
         <div class="brand"><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
         <div class="app-actions">
-          <!-- 순서: 플로피(미리보기) → 시가표준액 → 주택가격 -->
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openOnePagePreview()" title="한페이지 미리보기" aria-label="한페이지 미리보기">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="3" width="18" height="18" rx="2" class="icon-stroke"/>
-              <rect x="6" y="5.5" width="9" height="6" class="icon-stroke"/>
-              <rect x="17" y="6.5" width="3" height="3" fill="#1f2937"/>
-              <line x1="6" y1="16.5" x2="18" y2="16.5" class="icon-stroke"/>
-            </svg>
-          </a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
@@ -313,15 +304,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         </a>
         <div class="brand"><span>2025년 취득세 계산(상속 취득)</span></div>
         <div class="app-actions">
-          <!-- 순서: 플로피(미리보기) → 시가표준액 → 주택가격 -->
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openOnePagePreview()" title="한페이지 미리보기" aria-label="한페이지 미리보기">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="3" width="18" height="18" rx="2" class="icon-stroke"/>
-              <rect x="6" y="5.5" width="9" height="6" class="icon-stroke"/>
-              <rect x="17" y="6.5" width="3" height="3" fill="#1f2937"/>
-              <line x1="6" y1="16.5" x2="18" y2="16.5" class="icon-stroke"/>
-            </svg>
-          </a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
@@ -410,7 +392,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="left"><strong>한페이지 미리보기</strong></div>
         <div class="right">
           <button class="btn secondary" onclick="closeOnePagePreview()">닫기</button>
-          <button class="btn" onclick="printOnePagePreview()">인쇄</button>
+          <!-- 인쇄 버튼 제거 -->
         </div>
       </div>
       <div class="preview-page-wrap">
@@ -662,62 +644,8 @@ function fitPreviewScale(){
 
 window.addEventListener('resize', fitPreviewScale);
 
-function printOnePagePreview(){
-  const content = $('previewContent');
-  if(!content) return;
-  const holder = content.querySelector('.preview-scale');
-
-  const html = `<!doctype html><html><head><meta charset="utf-8"><title>미리보기 인쇄</title>
-    <style>
-      @page{size:A4 portrait;margin:10mm}
-      html,body{margin:0;height:100%;}
-      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow:visible}
-      /* 인쇄용 컨테이너: A4 내 여백 반영 크기 고정 */
-      .page{width:calc(210mm - 20mm);height:calc(297mm - 20mm);margin:10mm;position:relative;overflow:hidden}
-      .print-scale{transform-origin:top left;display:inline-block;}
-      /* 미리보기와 동일한 조밀 모드 적용 */
-      .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
-      .grid{grid-template-columns:1fr 1fr;gap:8px}
-      .card{padding:10px;box-shadow:none;border:1px solid #e5e7eb}
-      .sum-box{margin:6px 0;padding:10px}
-      .table{font-size:10pt}
-      .table th,.table td{padding:6px}
-      .title{margin:4px 0 8px 0;font-size:16pt}
-      header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
-      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      ${holder ? holder.outerHTML : content.innerHTML}
-    </div>
-    <script>
-      (function(){
-        try{
-          var page = document.querySelector('.page');
-          var holder = page && page.querySelector('.preview-scale');
-          if(!page || !holder){ window.print(); return; }
-          holder.style.transform = 'scale(1)';
-          // 자연 크기 재측정
-          var naturalW = holder.scrollWidth || holder.offsetWidth || page.clientWidth;
-          var naturalH = holder.scrollHeight || holder.offsetHeight || page.clientHeight;
-          var targetW = page.clientWidth;
-          var targetH = page.clientHeight;
-          var scale = Math.min(targetW/naturalW, targetH/naturalH, 1);
-          holder.classList.add('print-scale');
-          holder.style.transform = 'scale(' + scale + ')';
-          setTimeout(function(){ try{ window.print(); }catch(e){} }, 50);
-        }catch(e){ window.print(); }
-      })();
-    <\/script>
-  </body></html>`;
-  const w = window.open('', '_blank');
-  if(!w) return;
-  w.document.open();
-  w.document.write(html);
-  w.document.close();
-  w.focus();
-}
+// printOnePagePreview는 제거(필요 시 캔버스에서 되살릴 수 있음)
 </script>
 </body>
 </html>
+.
