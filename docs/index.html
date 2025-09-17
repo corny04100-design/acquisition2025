@@ -132,6 +132,28 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .pill label{margin:2px 0}
 /* 특례 문구: 줄바꿈 금지 + 크기/자간 축소 */
 .special-tight{white-space:nowrap;font-size:.9rem;letter-spacing:-.03em;line-height:1.2}
+
+/* ===== 미리보기 오버레이 (한페이지 맞춤) ===== */
+#previewOverlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
+#previewOverlay.show{display:flex}
+.preview-card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:12px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;gap:8px}
+.preview-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.preview-toolbar .left{display:flex;gap:6px;align-items:center}
+.preview-toolbar .right{display:flex;gap:6px;align-items:center}
+.preview-toolbar .btn{padding:8px 12px;border-radius:8px;background:var(--brand);color:#fff}
+.preview-toolbar .btn.secondary{background:#334155}
+.preview-page-wrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto}
+.preview-page{width:794px;height:1123px;border:1px solid #e5e7eb;box-shadow:0 6px 20px rgba(0,0,0,.08);background:#fff;transform-origin:top left;position:relative}
+.preview-content{position:absolute;inset:0;overflow:hidden;padding:12px}
+/* 미리보기 전용 축소 스타일 (조밀 모드) */
+.preview-content .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
+.preview-content .grid{grid-template-columns:1fr 1fr !important;gap:8px !important}
+.preview-content .card{padding:10px !important}
+.preview-content .sum-box{margin:6px 0 !important;padding:10px !important}
+.preview-content .table{font-size:10pt !important}
+.preview-content .table th,.preview-content .table td{padding:6px !important}
+.preview-content .title{margin:4px 0 8px 0 !important;font-size:16pt !important}
+.preview-content header.appbar,.preview-content .app-actions,.preview-content #splash,.preview-content .menu-wrap{display:none !important}
 </style>
 </head>
 <body>
@@ -215,10 +237,10 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         </a>
         <div class="brand"><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
         <div class="app-actions">
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="인쇄 미리보기" aria-label="인쇄">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M7 8V4h10v4M6 17H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M7 14h10v6H7zM17 11h.01"/></svg>
-          </a>
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="PDF로 저장" aria-label="PDF 저장">
+          <!-- 변경: 프린터 아이콘 대신 '시가표준액' 링크 -->
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
+          <!-- 변경: 플로피 버튼 = 한페이지 미리보기 -->
+          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openOnePagePreview()" title="한페이지 미리보기" aria-label="한페이지 미리보기">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="3" width="18" height="18" rx="2" class="icon-stroke"/>
               <rect x="6" y="5.5" width="9" height="6" class="icon-stroke"/>
@@ -295,10 +317,10 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         </a>
         <div class="brand"><span>2025년 취득세 계산(상속 취득)</span></div>
         <div class="app-actions">
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="인쇄 미리보기" aria-label="인쇄">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M7 8V4h10v4M6 17H5a 2 2 0 0 1-2-2v-3a 2 2 0 0 1 2-2h14a 2 2 0 0 1 2 2v3a 2 2 0 0 1-2 2h-1M7 14h10v6H7zM17 11h.01"/></svg>
-          </a>
-          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openPrint()" title="PDF로 저장" aria-label="PDF 저장">
+          <!-- 변경: 프린터 아이콘 대신 '시가표준액' 링크 -->
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
+          <!-- 변경: 플로피 버튼 = 한페이지 미리보기 -->
+          <a class="icon-btn icon-only" href="javascript:void(0)" onclick="openOnePagePreview()" title="한페이지 미리보기" aria-label="한페이지 미리보기">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="3" width="18" height="18" rx="2" class="icon-stroke"/>
               <rect x="6" y="5.5" width="9" height="6" class="icon-stroke"/>
@@ -382,6 +404,24 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <tfoot><tr><th>합계 세액</th><th id="상속_합계세율표시">3.16%</th><th id="상속_sumY">-</th></tr></tfoot>
           </table>
           <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 한페이지 미리보기 오버레이 ====== -->
+  <div id="previewOverlay" role="dialog" aria-modal="true" aria-label="한페이지 미리보기">
+    <div class="preview-card">
+      <div class="preview-toolbar">
+        <div class="left"><strong>한페이지 미리보기</strong></div>
+        <div class="right">
+          <button class="btn secondary" onclick="closeOnePagePreview()">닫기</button>
+          <button class="btn" onclick="printOnePagePreview()">인쇄</button>
+        </div>
+      </div>
+      <div class="preview-page-wrap">
+        <div class="preview-page" id="previewPage">
+          <div class="preview-content" id="previewContent"></div>
         </div>
       </div>
     </div>
@@ -695,6 +735,81 @@ try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', 
     }catch(e){}
   };
 })();
+</script>
+
+<script>
+// ===== 한페이지 미리보기 로직 =====
+function getActiveView(){
+  const v = Array.from(document.querySelectorAll('.view')).find(el=>!el.classList.contains('hidden'));
+  return v || document.getElementById('view-menu');
+}
+
+function openOnePagePreview(){
+  try{ calc2(); }catch(e){}
+  try{ calc3(); }catch(e){}
+
+  const overlay = $('previewOverlay');
+  const page = $('previewPage');
+  const content = $('previewContent');
+  if(!overlay||!page||!content) return;
+
+  // 현재 보이는 화면 내용을 복제해 미리보기 페이지에 삽입
+  const active = getActiveView();
+  const clone = active.cloneNode(true);
+  // 미리보기에서는 헤더/버튼 등 숨김 (CSS에서 처리), ID 충돌 방지를 위해 최상위에 data-preview 지정
+  clone.setAttribute('data-preview','1');
+  content.innerHTML='';
+  content.appendChild(clone);
+
+  overlay.classList.add('show');
+  requestAnimationFrame(fitPreviewScale);
+}
+
+function closeOnePagePreview(){
+  const overlay = $('previewOverlay');
+  if(overlay){ overlay.classList.remove('show'); }
+}
+
+function fitPreviewScale(){
+  const wrapper = document.querySelector('.preview-page-wrap');
+  const page = $('previewPage');
+  if(!wrapper||!page) return;
+  const pad = 16; // 여백
+  const availW = wrapper.clientWidth - pad;
+  const availH = wrapper.clientHeight - pad;
+  const scale = Math.min(availW/794, availH/1123);
+  page.style.transform = `scale(${Math.max(0.25, Math.min(1, scale))})`;
+}
+
+window.addEventListener('resize', fitPreviewScale);
+
+function printOnePagePreview(){
+  // 미리보기 콘텐츠만 별도 인쇄 창으로
+  const content = $('previewContent');
+  if(!content) return;
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>미리보기 인쇄</title>
+    <style>
+      @page{size:A4 portrait;margin:10mm}
+      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+      .wrap{max-width:100%;margin:0;padding:0}
+      .grid{grid-template-columns:1fr 1fr;gap:8px}
+      .card{padding:10px;box-shadow:none;border:1px solid #e5e7eb}
+      .sum-box{margin:6px 0;padding:10px}
+      .table{font-size:10pt}
+      .table th,.table td{padding:6px}
+      .title{margin:4px 0 8px 0;font-size:16pt}
+      header.appbar,.app-actions,.menu-wrap,#splash{display:none !important}
+    </style>
+  </head><body>${content.innerHTML}</body></html>`;
+  const w = window.open('', '_blank');
+  if(!w) return;
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+  // 인쇄 호출
+  w.focus();
+  w.onload = ()=>{ try{ w.print(); }catch(e){} };
+}
 </script>
 </body>
 </html>
