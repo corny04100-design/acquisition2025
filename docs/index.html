@@ -194,7 +194,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <circle cx="17" cy="69" r="1.7" fill="#22c55e"/>
       </svg>
       <div class="title-wrap">
-        <h1>2025 개인 취득세 계산</h1>
+        <h1>개인 취득세계산</h1>
         <div class="sub">주택·상가 매매/상속/증여</div>
       </div>
     </div>
@@ -290,7 +290,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <tbody>
                 <tr><td>과세표준</td><td id="과표">-</td></tr>
                 <tr><td>취득세</td><td>4%</td></tr>
-                <tr><td>농어촌특별세</td><td>0.2%</td></tr>
+                <tr><td>농어특별세</td><td>0.2%</td></tr>
                 <tr><td>지방교육세</td><td>0.4%</td></tr>
               </tbody>
             </table>
@@ -554,7 +554,7 @@ window.addEventListener('load',()=>{
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
     showView(initial, false);
     try{ history.replaceState({view:initial}, '', '#'+initial); }catch(e){}
-  },1300);
+  },4000);
 });
 </script>
 
