@@ -14,46 +14,30 @@
   --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
   --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
   --warn:#dc2626; --muted:#9ca3af;
-  /* 옅은 칩 색상 (요청사항 반영) */
-  --sky:#f7fbff;        /* 기존보다 더 옅은 하늘색 */
-  --sky-line:#e3f2ff;
-  --green:#f0fdf4;      /* 기존보다 더 옅은 연두색 */
-  --green-line:#dcfce7;
+  --sky:#f7fbff; --sky-line:#e3f2ff;
+  --green:#f0fdf4; --green-line:#dcfce7;
   --yellow:#fef9c3;
-  /* 스플래시 */
   --splash-a:#ecf3ff; --splash-b:#f5faff; --splash-accent:#2563eb;
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
 .hidden{display:none !important}
 
-/* ===== 전체 화면 스플래시 (배경 + 그림 + 진행바) ===== */
-#splash{
-  position:fixed; inset:0; z-index:9999;
-  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+/* ===== 전체 화면 스플래시 ===== */
+#splash{position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
   background:
     radial-gradient(1200px 800px at 10% 10%, rgba(37,99,235,.08), transparent 60%),
     radial-gradient(900px 700px at 90% 20%, rgba(16,185,129,.08), transparent 60%),
     radial-gradient(800px 600px at 30% 90%, rgba(99,102,241,.08), transparent 60%),
     linear-gradient(180deg, var(--splash-b), var(--splash-a));
-  overflow:hidden;
-}
-#splash .ring{
-  position:absolute; width:140vmax; height:140vmax; border-radius:50%;
-  background:radial-gradient(circle at center, rgba(37,99,235,.06), transparent 60%);
-  animation: ringFloat 9s ease-in-out infinite;
-}
-@keyframes ringFloat{ 0%,100%{ transform:translate(-10%, -8%) rotate(0deg);} 50%{ transform:translate(-6%, -12%) rotate(8deg);} }
-
-#splash .card{
-  background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
-  border:1px solid rgba(37,99,235,.15); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.12);
-  padding:22px 26px; display:flex; align-items:center; gap:16px;
-}
-#splash .art{ width:84px; height:84px; flex:0 0 auto }
-#splash .title-wrap{ display:flex; flex-direction:column; gap:2px }
+  overflow:hidden;}
+#splash .ring{position:absolute; width:140vmax; height:140vmax; border-radius:50%;
+  background:radial-gradient(circle at center, rgba(37,99,235,.06), transparent 60%); animation: ringFloat 9s ease-in-out infinite;}
+@keyframes ringFloat{0%,100%{transform:translate(-10%, -8%) rotate(0deg);} 50%{transform:translate(-6%, -12%) rotate(8deg);} }
+#splash .card{background:rgba(255,255,255,.85); backdrop-filter:blur(8px); border:1px solid rgba(37,99,235,.15); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.12); padding:22px 26px; display:flex; align-items:center; gap:16px;}
+#splash .art{width:84px;height:84px;flex:0 0 auto}
+#splash .title-wrap{display:flex;flex-direction:column;gap:2px}
 #splash h1{font-size:1.35rem;margin:0;color:#0f172a;font-weight:900;letter-spacing:-0.01em}
 #splash .sub{font-size:.9rem;color:#334155}
-
 #splash .bar{ width:min(340px, 80vw); height:6px; border-radius:999px; background:rgba(15,23,42,.12); overflow:hidden; box-shadow:inset 0 0 0 1px rgba(15,23,42,.06) }
 #splash .bar > i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--splash-accent), #4f46e5); animation: loadGrow 1.3s linear forwards }
 @keyframes loadGrow{ to{ width:100% } }
@@ -119,9 +103,9 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 /* 아이콘칩 & 체크박스 */
 #view-calc3 .area-options,#view-calc4 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
 .icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow);width:fit-content}
-.icon-chip.sky{background:var(--sky);border-color:var(--sky-line)}       /* 더 옅게 */
+.icon-chip.sky{background:var(--sky);border-color:var(--sky-line)}
 .icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
-.icon-chip.green{background:var(--green);border-color:var(--green-line)} /* 더 옅게 */
+.icon-chip.green{background:var(--green);border-color:var(--green-line)}
 .icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
 .icon-chip .sep{opacity:.6}
 .sep{opacity:.6}
@@ -142,8 +126,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 #view-calc4 details summary{ font-weight:900 }
 #view-calc4 details .table td,#view-calc4 details .table th{ font-weight:800 }
 
+/* ===== 증여: 버튼/간이합계 25% 간격 ===== */
+#view-calc4 .btn-row{ display:flex; align-items:center; gap:10px; width:100%; }
+#view-calc4 .btn-row .quarter-gap{ flex:0 0 25%; } /* 가운데 정확히 25% 비움 */
+
 /* 증여 view: 버튼 밑 간이 합계 표시 */
-.quick-sum{ display:none; margin:10px auto 0 auto; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
+.quick-sum{ display:none; margin:10px 0 0 0; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
 .quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem }
 .quick-sum .value{ font-size:1.08rem }
 
@@ -190,7 +178,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   <div id="splash" role="status" aria-live="polite">
     <div class="ring" aria-hidden="true"></div>
     <div class="card" aria-hidden="true">
-      <!-- 간단한 일러스트: 집 + 서류 + 계산기 (SVG) -->
+      <!-- 간단한 일러스트 -->
       <svg class="art" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M12 48 L48 22 L84 48" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <rect x="22" y="48" width="24" height="26" rx="3" fill="none" stroke="#1f2937" stroke-width="2"/>
@@ -206,8 +194,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <circle cx="17" cy="69" r="1.7" fill="#22c55e"/>
       </svg>
       <div class="title-wrap">
-        <h1>개인 취득세 계산</h1>
-        <div class="sub">주택/상가/상속/증여</div>
+        <h1>2025 개인 취득세 계산</h1>
+        <div class="sub">주택·상가 매매/상속/증여</div>
       </div>
     </div>
     <div class="bar" aria-hidden="true"><i></i></div>
@@ -238,21 +226,15 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           </button>
           <button class="menu-item ready" onclick="showView('calc2')">
             <div class="menu-num">2</div>
-            <div>
-              <div class="menu-text">상가(오피스텔) 매매 취득</div>
-            </div>
+            <div><div class="menu-text">상가(오피스텔) 매매 취득</div></div>
           </button>
           <button class="menu-item ready sky" onclick="showView('calc3')">
             <div class="menu-num">3</div>
-            <div>
-              <div class="menu-text">상속 취득</div>
-            </div>
+            <div><div class="menu-text">상속 취득</div></div>
           </button>
           <button class="menu-item ready" onclick="showView('calc4')">
             <div class="menu-num">4</div>
-            <div>
-              <div class="menu-text">증여 취득</div>
-            </div>
+            <div><div class="menu-text">증여 취득</div></div>
           </button>
         </div>
       </div>
@@ -283,7 +265,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
-          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
         </div>
       </div>
     </header>
@@ -355,7 +336,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
-          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
         </div>
       </div>
     </header>
@@ -451,7 +431,6 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
-          <a class="icon-btn btn-install" href="javascript:void(0)" onclick="openInstall()" title="앱 설치" aria-label="앱 설치">앱설치</a>
         </div>
       </div>
     </header>
@@ -461,7 +440,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <!-- 유형 선택(연두 칩, 더 옅게) -->
+          <!-- 유형 선택 -->
           <div class="type-options box" id="g_typeOptions" aria-label="증여 취득 유형 선택">
             <div class="icon-chip green" id="g_typeBox" role="group" aria-label="증여 취득 유형 선택">
               <label><input type="checkbox" id="g_isHouse" /> <span>1. 주택</span></label>
@@ -470,7 +449,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
           </div>
 
-          <!-- 전용면적 선택(주택만 표시, 하늘 칩 더 옅게) -->
+          <!-- 전용면적 선택(주택만) -->
           <div id="g_areaOptions" class="area-options hidden" aria-live="polite">
             <div class="icon-chip sky" id="g_areaBox" role="group" aria-label="전용면적 선택">
               <label><input type="checkbox" id="g_area_le_85" /> <span>전용면적 85m² 이하</span></label>
@@ -490,8 +469,9 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
           </div>
 
-          <div style="margin-top:14px;text-align:center">
+          <div class="btn-row" style="margin-top:14px;">
             <button class="btn" onclick="calc4()">✍️ 계산하기</button>
+            <div class="quarter-gap" aria-hidden="true"></div>
             <div id="증여_quick_sum" class="quick-sum" role="status" aria-live="polite">
               <span class="label">총 합계 세액</span><span id="증여_quick_sum_value" class="value">-</span>
             </div>
@@ -566,11 +546,9 @@ window.addEventListener('popstate', (event)=>{
   showView(view, false);
 });
 window.addEventListener('load',()=>{
-  // 1.3초 후 스플래시 페이드아웃
   const sp=document.getElementById('splash');
   const endSplash=()=>{ if(!sp) return; sp.style.transition='opacity .35s ease'; sp.style.opacity='0';
-    setTimeout(()=>{ sp.classList.add('hidden'); }, 360);
-  };
+    setTimeout(()=>{ sp.classList.add('hidden'); }, 360); };
   setTimeout(()=>{
     endSplash();
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
@@ -725,10 +703,11 @@ function calc4(){
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
-  if(id==='증여일') calc4();
-  if(id==='g_isHouse' || id==='g_isNonHouse'){ g_enforceTypeExclusive(id); g_refreshAreaOptions(); calc4(); }
-  if(id==='g_area_le_85'){ if(e.target.checked) g_toggleArea('g_area_le_85'); calc4(); }
-  if(id==='g_area_gt_85'){ if(e.target.checked) g_toggleArea('g_area_gt_85'); calc4(); }
+  /* 날짜 변경 시 자동 계산 금지: 아래 줄 제거됨 */
+  // if(id==='증여일') calc4();
+  if(id==='g_isHouse' || id==='g_isNonHouse'){ g_enforceTypeExclusive(id); g_refreshAreaOptions(); /* 자동 계산 제거 원하면 calc4() 호출 안 함 */ }
+  if(id==='g_area_le_85'){ if(e.target.checked) g_toggleArea('g_area_le_85'); /* calc4(); 제거 */ }
+  if(id==='g_area_gt_85'){ if(e.target.checked) g_toggleArea('g_area_gt_85'); /* calc4(); 제거 */ }
 });
 document.addEventListener('DOMContentLoaded', ()=>{ g_refreshAreaOptions(); });
 </script>
@@ -792,3 +771,4 @@ window.addEventListener('resize', fitPreviewScale);
 </script>
 </body>
 </html>
+.
