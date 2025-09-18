@@ -88,6 +88,11 @@ input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d
 .table th{text-align:center;background:var(--bg)}
 .table thead th:nth-child(2),.table thead th:nth-child(3){text-align:right}
 .table td{text-align:right}
+/* 증여(2. 산출 세액) tfoot의 '세율'과 '세액' 우측 정렬 */
+#view-calc4 tfoot th:nth-child(2),
+#view-calc4 tfoot th:nth-child(3){
+  text-align:right;
+}
 .table td:first-child{text-align:center}
 tfoot tr{background:var(--sum-bg);font-weight:700}
 .sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700}
