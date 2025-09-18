@@ -13,8 +13,14 @@
   --bg:#f9fafb; --card:#ffffff; --text:#111827; --text-sub:#6b7280;
   --brand:#2563eb; --brand-weak:#eff6ff; --sum-bg:#f3f4f6;
   --input-bg:#fefce8; --line:#e5e7eb; --shadow:rgba(0,0,0,.06);
-  --warn:#dc2626; --muted:#9ca3af; --sky:#e0f2fe; --yellow:#fef9c3;
-  --green:#dcfce7; --green-line:#bbf7d0;
+  --warn:#dc2626; --muted:#9ca3af;
+  /* 옅은 칩 색상 (요청사항 반영) */
+  --sky:#f7fbff;        /* 기존보다 더 옅은 하늘색 */
+  --sky-line:#e3f2ff;
+  --green:#f0fdf4;      /* 기존보다 더 옅은 연두색 */
+  --green-line:#dcfce7;
+  --yellow:#fef9c3;
+  /* 스플래시 */
   --splash-a:#ecf3ff; --splash-b:#f5faff; --splash-accent:#2563eb;
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
@@ -113,9 +119,9 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 /* 아이콘칩 & 체크박스 */
 #view-calc3 .area-options,#view-calc4 .area-options{display:flex;flex-direction:column;gap:8px;margin:5px 0 7px 0}
 .icon-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);white-space:nowrap;box-shadow:0 1px 2px var(--shadow);width:fit-content}
-.icon-chip.sky{background:var(--sky);border-color:#bae6fd}
+.icon-chip.sky{background:var(--sky);border-color:var(--sky-line)}       /* 더 옅게 */
 .icon-chip.yellow{background:var(--yellow);border-color:#fde68a}
-.icon-chip.green{background:var(--green);border-color:var(--green-line)}
+.icon-chip.green{background:var(--green);border-color:var(--green-line)} /* 더 옅게 */
 .icon-chip label{display:inline-flex;align-items:center;gap:5px;margin:0}
 .icon-chip .sep{opacity:.6}
 .sep{opacity:.6}
@@ -253,7 +259,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 준비 중 화면(1번) -->
+  <!-- 1: 준비 중 화면 -->
   <div id="view-coming1" class="view hidden">
     <div class="wrap">
       <div class="card" style="text-align:center">
@@ -264,14 +270,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 2번: 상가(오피스텔) 매매 취득 계산기 -->
+  <!-- 2: 상가(오피스텔) 유상취득 -->
   <div id="view-calc2" class="view hidden" aria-labelledby="calc2-heading">
     <header class="appbar">
       <div class="row">
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span>2025년 취득세 계산(상가 등 유상취득)</span></div>
+        <div class="brand"><span>2025년 개인 취득세 계산</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
@@ -282,7 +288,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </header>
     <div class="wrap">
-      <h1 id="calc2-heading" class="title">2025년 취득세 계산(상가 등 유상취득)</h1>
+      <h1 id="calc2-heading" class="title">2025년 개인 취득세 계산</h1>
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
@@ -336,14 +342,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 3번: 상속 취득 계산기 -->
+  <!-- 3: 상속 취득 -->
   <div id="view-calc3" class="view hidden" aria-labelledby="calc3-heading">
     <header class="appbar">
       <div class="row">
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span>2025년 취득세 계산(상속 취득)</span></div>
+        <div class="brand"><span>2025년 취득세 계산(상속)</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
@@ -354,7 +360,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </header>
     <div class="wrap">
-      <h1 id="calc3-heading" class="title">2025년 취득세 계산(상속 취득)</h1>
+      <h1 id="calc3-heading" class="title">2025년 취득세 계산(상속)</h1>
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
@@ -431,19 +437,17 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 4번: 증여 취득 계산기 -->
+  <!-- 4: 증여 취득 -->
   <div id="view-calc4" class="view hidden" aria-labelledby="calc4-heading">
     <header class="appbar">
       <div class="row">
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span>2025년 취득세 계산(증여 취득)</span></div>
+        <div class="brand"><span>2025년 취득세 계산(증여)</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030901M01.do" title="시가인정액 조회">시가인정액</a>
-          <!-- 추가: 시가표준액 -->
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
-          <!-- 추가: 주택가격 -->
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
           <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
@@ -452,12 +456,12 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </header>
     <div class="wrap">
-      <h1 id="calc4-heading" class="title">2025년 취득세 계산(증여 취득)</h1>
+      <h1 id="calc4-heading" class="title">2025년 취득세 계산(증여)</h1>
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
-          <!-- 유형 선택(녹색 칩) -->
+          <!-- 유형 선택(연두 칩, 더 옅게) -->
           <div class="type-options box" id="g_typeOptions" aria-label="증여 취득 유형 선택">
             <div class="icon-chip green" id="g_typeBox" role="group" aria-label="증여 취득 유형 선택">
               <label><input type="checkbox" id="g_isHouse" /> <span>1. 주택</span></label>
@@ -466,7 +470,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
           </div>
 
-          <!-- 전용면적 선택(주택만 표시) -->
+          <!-- 전용면적 선택(주택만 표시, 하늘 칩 더 옅게) -->
           <div id="g_areaOptions" class="area-options hidden" aria-live="polite">
             <div class="icon-chip sky" id="g_areaBox" role="group" aria-label="전용면적 선택">
               <label><input type="checkbox" id="g_area_le_85" /> <span>전용면적 85m² 이하</span></label>
@@ -753,7 +757,7 @@ async function openInstall(){
     if(isStandalone()){ setInstallButtonsVisible(false); return; }
     if(deferredPrompt){ deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice.catch(()=>null); deferredPrompt=null; if(!choice || choice.outcome!=='accepted'){ updateInstallUI(); } return; }
     if(isiOS && isSafari){ alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.'); }
-    else{ alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요.'); }
+    else{ alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요."); }
   }catch(e){ console.error(e); }
 }
 ['load','pageshow','visibilitychange'].forEach(evt=>{ window.addEventListener(evt, updateInstallUI); });
