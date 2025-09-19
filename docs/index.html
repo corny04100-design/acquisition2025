@@ -221,6 +221,10 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .preview-content .title{margin:4px 0 8px 0 !important;font-size:16pt !important}
 .preview-content header.appbar,.preview-content .app-actions,.preview-content #splash,.preview-content .menu-wrap{display:none !important}
 .preview-scale{transform-origin: top left; display:inline-block;}
+/* 안내 배너 (리프레시, 아이콘 제거·가독성 강화) */
+.menu-notice{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:12px 16px;border:1px solid var(--menu1-border);background:#fff;border-radius:12px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;box-shadow:0 4px 12px var(--shadow);text-align:center;word-break:keep-all}
+.menu-notice .chip{display:inline-flex;align-items:center;justify-content:center;padding:4px 12px;border-radius:999px;background:var(--brand-weak);border:1px solid #bfdbfe;font-weight:900}
+
 </style>
 </head>
 <body>
@@ -285,7 +289,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <div class="menu-num">4</div>
             <div><div class="menu-text">증여 취득</div></div>
           </button>
-        <div class="menu-notice" role="note" aria-label="안내"><div><span class="badge">안내</span> 그 외 취득은 관할구청 세무과에 문의</div></div>
+        <div class="menu-notice" role="note" aria-label="안내">그 외 취득은 <span class="chip">관할구청 세무과</span> 문의</div></div>
 </div>
       </div>
     </div>
@@ -298,7 +302,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span>2025년 취득세 계산(주택)</span></div>
+        <div class="brand"><span>2025년 취득세 계산(주택 매매)</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
@@ -308,7 +312,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </header>
     <div class="wrap">
-      <h1 id="calc1-heading" class="title">2025년 취득세 계산(주택)</h1>
+      <h1 id="calc1-heading" class="title">2025년 취득세 계산(주택 매매)</h1>
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
