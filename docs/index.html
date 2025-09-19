@@ -75,9 +75,9 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 .menu-item:hover{background:#f8fafc}
 .menu-num{min-width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--brand-weak);font-weight:800}
 .menu-text{font-size:1rem;font-weight:700}
+
 /* 안내 배너(메뉴 하단) */
 .menu-notice{display:flex;align-items:center;gap:10px;margin-top:12px;padding:12px 14px;border:1px dashed var(--menu1-border);background:linear-gradient(0deg,#fff, var(--brand-weak));border-radius:12px;color:#0f172a;font-weight:700}
-.menu-notice .icon{width:20px;height:20px;flex:0 0 auto}
 .menu-notice .badge{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:999px;background:#dbeafe;color:#1e40af;font-size:.75rem;font-weight:900;margin-right:8px}
 .menu-notice .em{text-decoration:underline;text-underline-offset:3px;font-weight:900}
 /* ▶ 4개 항목 전용 색상(구분용) */
@@ -285,11 +285,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             <div class="menu-num">4</div>
             <div><div class="menu-text">증여 취득</div></div>
           </button>
-        <div class="menu-notice" role="note" aria-label="안내">
-  <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M3 21h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 21v-6h6v6" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  <div><span class="badge">안내</span> <strong>그 외 취득</strong>은 <span class="em">부동산 소재지 구청 </span>에 문의하세요.</div>
+        <div class="menu-notice" role="note" aria-label="안내"><div><span class="badge">안내</span> 그 외 취득은 관할구청 세무과에 문의</div></div>
 </div>
       </div>
     </div>
