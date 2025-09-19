@@ -689,7 +689,7 @@ window.addEventListener('load',()=>{
     const initial = location.hash ? location.hash.replace('#','') : 'menu';
     showView(initial, false);
     try{ history.replaceState({view:initial}, '', '#'+initial); }catch(e){}
-  },3000);
+  },2500);
 });
 </script>
 
