@@ -60,7 +60,7 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 .icon-stroke{fill:none;stroke:#1f2937;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .installed .btn-install{display:none !important}
 
-/* 공통 레이आउ트 */
+/* 공통 레이아웃 */
 .wrap{max-width:960px;margin:18px auto 70px;padding:0 16px}
 .title{font-size:1.25rem;font-weight:800;margin-bottom:9px;text-align:center}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 4px 12px var(--shadow);margin-bottom:14px}
@@ -94,6 +94,8 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 /* 표/입력 */
 .grid{display:grid;grid-template-columns:50% 50%;gap:18px}
 #view-calc1 .grid,#view-calc2 .grid,#view-calc3 .grid,#view-calc4 .grid{grid-template-columns:1fr 1fr}
+/* ▼ 요청 반영: calc1도 단일열(아래로 배치)로 변경 */
+#view-calc1 .grid{grid-template-columns:1fr !important}
 #view-calc2 .grid,#view-calc3 .grid,#view-calc4 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 h2{font-size:1.03rem;margin:0}
@@ -156,10 +158,25 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 /* ====== ▶ 요청 반영: calc1 전용 스타일 ====== */
 /* 1) 첫 번째 카드의 제목만 가운데 정렬 */
 #view-calc1 .grid > .card:first-child .header-row h2{ text-align:center; width:100%; }
-/* 2) 전용면적 셀렉트 박스 가로 40% 확대: 기존 70% → 98% */
+/* 2) 전용면적 셀렉트 박스 가로 확대 */
 #view-calc1 #h_area.sel{ width:98%; }
-/* 3) '납부 안내' 문구(주택) 글자 크기 2단계 축소 */
-#view-calc1 #h_sum_guide{ font-size:0.8rem; }
+/* 3) '납부 안내' 글자 크기 2단계 축소 */
+#view-calc1 #h_sum_guide{ font-size:0.8rem !important; }
+/* 4) 요청: 4개 소제목(라벨) 가운데 정렬 + 글자색 검정 */
+#view-calc1 .input-grid .col-amount label,
+#view-calc1 .input-grid .col-date label{
+  text-align:center; color:#000;
+}
+/* 5) 요청: 잔금지급일의 날짜 숫자 굵게 + 검정 */
+#view-calc1 #h_date{
+  font-weight:800; color:#000;
+}
+
+/* ====== ▶ 추가 요청 반영: calc2 라벨 가운데 정렬 ====== */
+#view-calc2 .input-grid .col-amount label,
+#view-calc2 .input-grid .col-date label{
+  text-align:center;
+}
 
 /* 인쇄 최적화 */
 @media print{
@@ -167,6 +184,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
   body{font-size:11pt}
   .wrap{max-width:100%;margin:0;padding:0}
   .grid{grid-template-columns:1fr 1fr;gap:7px}
+  /* ▼ calc1은 인쇄에서도 단일열 유지 */
+  #view-calc1 .grid{grid-template-columns:1fr !important}
   .card{padding:9px;box-shadow:none;border-color:#e5e7eb;margin-bottom:10px}
   .sum-box{margin:5px 0;padding:9px;grid-template-columns:50% 50%}
   .table{font-size:10pt}
@@ -190,6 +209,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .preview-content{position:absolute;inset:0;overflow:hidden;padding:12px}
 .preview-content .wrap{max-width:100% !important;margin:0 !important;padding:0 8px !important}
 .preview-content .grid{grid-template-columns:1fr 1fr !important;gap:8px !important}
+/* ▼ 미리보기에서도 calc1은 단일열 유지 */
+.preview-content #view-calc1 .grid{grid-template-columns:1fr !important}
 .preview-content .card{padding:10px !important}
 .preview-content .sum-box{margin:6px 0 !important;padding:10px !important}
 .preview-content .table{font-size:10pt !important}
@@ -365,7 +386,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
         <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
         </a>
-        <div class="brand"><span>2025년 개인 취득세 계산</span></div>
+        <div class="brand"><span>2025년 취득세 계산(상가 매매)</span></div>
         <div class="app-actions">
           <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
           <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
@@ -375,7 +396,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       </div>
     </header>
     <div class="wrap">
-      <h1 id="calc2-heading" class="title">2025년 개인 취득세 계산</h1>
+      <h1 id="calc2-heading" class="title">2025년 취득세 계산(상가 매매)</h1>
       <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
@@ -447,7 +468,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </header>
     <div class="wrap">
       <h1 id="calc3-heading" class="title">2025년 취득세 계산(상속)</h1>
-      <div class="grid">
+    <div class="grid">
         <div class="card">
           <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
 
