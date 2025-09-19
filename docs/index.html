@@ -18,6 +18,12 @@
   --green:#f0fdf4; --green-line:#dcfce7;
   --yellow:#fef9c3;
   --splash-a:#ecf3ff; --splash-b:#f5faff; --splash-accent:#2563eb;
+
+  /* 메뉴 4칸 전용 색상 (서로 다른 파스텔톤) */
+  --menu1:#e0f2fe; --menu1-border:#bae6fd; --menu1-hover:#dbeafe;      /* 하늘색 */
+  --menu2:#ecfdf5; --menu2-border:#a7f3d0; --menu2-hover:#d1fae5;      /* 민트색 */
+  --menu3:#fdf2f8; --menu3-border:#fbcfe8; --menu3-hover:#fce7f3;      /* 로즈핑크 */
+  --menu4:#fef3c7; --menu4-border:#fde68a; --menu4-hover:#feeeb5;      /* 라이트옐로 */
 }
 html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);line-height:1.6}
 .hidden{display:none !important}
@@ -54,58 +60,60 @@ header .row{max-width:960px;margin:0 auto;padding:9px 16px;display:flex;align-it
 .icon-stroke{fill:none;stroke:#1f2937;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .installed .btn-install{display:none !important}
 
-/* 공통 레이아웃 */
+/* 공통 레이आउ트 */
 .wrap{max-width:960px;margin:18px auto 70px;padding:0 16px}
 .title{font-size:1.25rem;font-weight:800;margin-bottom:9px;text-align:center}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 4px 12px var(--shadow);margin-bottom:14px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:filter .15s}
 .btn:hover{filter:brightness(1.05)}
+.warn{color:var(--warn);font-size:.85rem;margin-top:8px}
 
 /* 메뉴 */
 #view-menu .menu-wrap{max-width:640px;margin:0 auto}
 .menu-grid{display:grid;grid-template-columns:1fr;gap:13px}
 .menu-item{display:flex;align-items:center;gap:13px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 12px var(--shadow);cursor:pointer;text-decoration:none;color:inherit}
 .menu-item:hover{background:#f8fafc}
-.menu-item.ready{background:#fef2f2;border-color:#fecaca}
-.menu-item.ready .menu-num{background:#fee2e2}
-.menu-item.ready:hover{background:#fee2e2}
-.menu-item.sky{background:#e0f2fe !important;border-color:#bae6fd !important}
-.menu-item.sky:hover{background:#dbeafe !important}
 .menu-num{min-width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--brand-weak);font-weight:800}
 .menu-text{font-size:1rem;font-weight:700}
 .menu-note{font-size:.83rem;color:var(--text-sub)}
 
+/* ▶ 4개 항목 전용 색상(구분용) */
+.menu-item.c1{background:var(--menu1); border-color:var(--menu1-border)}
+.menu-item.c1:hover{background:var(--menu1-hover)}
+.menu-item.c2{background:var(--menu2); border-color:var(--menu2-border)}
+.menu-item.c2:hover{background:var(--menu2-hover)}
+.menu-item.c3{background:var(--menu3); border-color:var(--menu3-border)}
+.menu-item.c3:hover{background:var(--menu3-hover)}
+.menu-item.c4{background:var(--menu4); border-color:var(--menu4-border)}
+.menu-item.c4:hover{background:var(--menu4-hover)}
+.menu-item.c1 .menu-num{background:#cfe7fb}
+.menu-item.c2 .menu-num{background:#d7f7ea}
+.menu-item.c3 .menu-num{background:#f9dff0}
+.menu-item.c4 .menu-num{background:#fde7a7}
+
 /* 표/입력 */
 .grid{display:grid;grid-template-columns:50% 50%;gap:18px}
+#view-calc1 .grid,#view-calc2 .grid,#view-calc3 .grid,#view-calc4 .grid{grid-template-columns:1fr 1fr}
 #view-calc2 .grid,#view-calc3 .grid,#view-calc4 .grid{grid-template-columns:1fr !important}
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 h2{font-size:1.03rem;margin:0}
 h2 .unit{font-size:0.73rem;color:var(--text-sub)}
 label{font-size:0.88rem;color:var(--text-sub);margin-bottom:3px;display:block}
 input.num{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:var(--input-bg);text-align:right;font-size:1rem}
+select.sel{width:70%;display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:1rem}
 .table{width:100%;border-collapse:collapse;margin-top:8px;font-size:0.88rem}
 .table th,.table td{padding:9px;border-bottom:1px solid var(--line)}
 .table th{text-align:center;background:var(--bg)}
 .table thead th:nth-child(2),.table thead th:nth-child(3){text-align:right}
 .table td{text-align:right}
-/* 상가(오피스텔) 유상취득 & 상속 취득: tfoot '세율'·'세액' 우측 정렬 */
-#view-calc2 tfoot th:not(:first-child),
-#view-calc3 tfoot th:not(:first-child){
-  text-align:right;
-}
-/* 증여(2. 산출 세액) tfoot의 '세율'과 '세액' 우측 정렬 */
-#view-calc4 tfoot th:nth-child(2),
-#view-calc4 tfoot th:nth-child(3){
-  text-align:right;
-}
 .table td:first-child{text-align:center}
 tfoot tr{background:var(--sum-bg);font-weight:700}
 .sum-box{background:var(--brand-weak);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin:10px 0;display:grid;grid-template-columns:50% 50%;gap:9px;text-align:center;font-weight:700}
 
 /* 입력 그리드 / 날짜 */
-#view-calc2 .input-grid,#view-calc3 .input-grid,#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
-#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
-#view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
+#view-calc1 .input-grid,#view-calc2 .input-grid,#view-calc3 .input-grid,#view-calc4 .input-grid{display:grid;grid-template-columns:7fr 3fr;gap:10px;align-items:end;margin-bottom:10px}
+#view-calc1 .input-grid input.num,#view-calc2 .input-grid input.num,#view-calc3 .input-grid input.num,#view-calc4 .input-grid input.num{width:70%}
+#view-calc1 input.date,#view-calc2 input.date,#view-calc3 input.date,#view-calc4 input.date{display:block;margin:0 auto;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;text-align:center;font-size:1rem}
 .deadline-box{background:var(--brand-weak);border:1px dashed #bfdbfe;border-radius:12px;padding:10px;text-align:center;margin-top:8px}
 .deadline-box .label{font-size:.78rem;color:#374151}
 .deadline-box .value{font-size:1.03rem;font-weight:700}
@@ -144,6 +152,14 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .quick-sum{ display:none; margin:10px 0 0 0; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
 .quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem }
 .quick-sum .value{ font-size:1.08rem }
+
+/* ====== ▶ 요청 반영: calc1 전용 스타일 ====== */
+/* 1) 첫 번째 카드의 제목만 가운데 정렬 */
+#view-calc1 .grid > .card:first-child .header-row h2{ text-align:center; width:100%; }
+/* 2) 전용면적 셀렉트 박스 가로 40% 확대: 기존 70% → 98% */
+#view-calc1 #h_area.sel{ width:98%; }
+/* 3) '납부 안내' 문구(주택) 글자 크기 2단계 축소 */
+#view-calc1 #h_sum_guide{ font-size:0.8rem; }
 
 /* 인쇄 최적화 */
 @media print{
@@ -227,22 +243,21 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
       <div class="title">취득유형 선택</div>
       <div class="menu-wrap">
         <div class="menu-grid" role="navigation" aria-label="취득 유형 선택">
-          <button class="menu-item" onclick="showView('coming1')">
+          <button class="menu-item c1" onclick="showView('calc1')">
             <div class="menu-num">1</div>
             <div>
               <div class="menu-text">주택 매매 취득</div>
-              <div class="menu-note">준비 중</div>
             </div>
           </button>
-          <button class="menu-item ready" onclick="showView('calc2')">
+          <button class="menu-item c2" onclick="showView('calc2')">
             <div class="menu-num">2</div>
             <div><div class="menu-text">상가(오피스텔) 매매 취득</div></div>
           </button>
-          <button class="menu-item ready sky" onclick="showView('calc3')">
+          <button class="menu-item c3" onclick="showView('calc3')">
             <div class="menu-num">3</div>
             <div><div class="menu-text">상속 취득</div></div>
           </button>
-          <button class="menu-item ready" onclick="showView('calc4')">
+          <button class="menu-item c4" onclick="showView('calc4')">
             <div class="menu-num">4</div>
             <div><div class="menu-text">증여 취득</div></div>
           </button>
@@ -251,13 +266,94 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
     </div>
   </div>
 
-  <!-- 1: 준비 중 화면 -->
-  <div id="view-coming1" class="view hidden">
+  <!-- 1: 주택 유상취득 -->
+  <div id="view-calc1" class="view hidden" aria-labelledby="calc1-heading">
+    <header class="appbar">
+      <div class="row">
+        <a class="icon-btn icon-only" href="javascript:void(0)" onclick="showView('menu')" title="뒤로" aria-label="뒤로">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="icon-stroke" d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div class="brand"><span>2025년 취득세 계산(주택)</span></div>
+        <div class="app-actions">
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/tcp/loi/J030401M01.do" title="시가표준액 조회">시가표준액</a>
+          <a class="icon-btn" target="_blank" href="https://www.realtyprice.kr/notice/main/mainBody.htm" title="주택가격 조회">주택가격</a>
+          <a class="icon-btn" target="_blank" href="https://www.law.go.kr/LSW/lsSc.do?query=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95">🔍 지방세법</a>
+          <a class="icon-btn" target="_blank" href="https://www.wetax.go.kr/etq/etp/epi/E070101M01.do">🧾 위택스</a>
+        </div>
+      </div>
+    </header>
     <div class="wrap">
-      <div class="card" style="text-align:center">
-        <div class="title">주택 매매 취득</div>
-        <p style="color:var(--text-sub)">이 기능은 준비 중입니다.</p>
-        <button class="btn" onclick="showView('menu')">← 메뉴로</button>
+      <h1 id="calc1-heading" class="title">2025년 취득세 계산(주택)</h1>
+      <div class="grid">
+        <div class="card">
+          <div class="header-row"><h2>1. 취득 정보 입력 <span class="unit">(단위: 원)</span></h2></div>
+          <div class="input-grid">
+            <div class="col col-amount">
+              <label for="h_price">취득가액(매매가)</label>
+              <input id="h_price" class="num" type="text" inputmode="numeric" placeholder="숫자만 입력" />
+            </div>
+            <div class="col col-date">
+              <label for="h_date">잔금지급일</label>
+              <input id="h_date" type="date" class="date" />
+            </div>
+          </div>
+
+          <div class="input-grid">
+            <div class="col col-amount">
+              <label for="h_type">취득 구분</label>
+              <select id="h_type" class="sel">
+                <option value="normal1">일반과세</option>
+                <option value="adj2">조정대상지역 2주택 중과</option>
+                <option value="adj3">조정대상지역 3주택이상 중과</option>
+              </select>
+            </div>
+            <div class="col col-date">
+              <label for="h_area">전용면적</label>
+              <select id="h_area" class="sel">
+                <option value="under">85㎡ 이하</option>
+                <option value="over">85㎡ 초과</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc1()">✍️ 계산하기</button></div>
+
+          <details class="center-30" style="margin-top:16px" open>
+            <summary>세율 및 과세표준</summary>
+            <table class="table nowrap">
+              <tbody>
+                <tr><td>과세표준</td><td id="h_base">-</td></tr>
+                <tr><td>취득세</td><td id="h_rate_acq">-</td></tr>
+                <tr><td>농어촌특별세</td><td id="h_rate_nts">-</td></tr>
+                <tr><td>지방교육세</td><td id="h_rate_edu">-</td></tr>
+              </tbody>
+            </table>
+            <div class="deadline-box center-30" style="margin-top:10px">
+              <div class="label">취득세 납부기한</div>
+              <div class="value" id="h_deadline">-</div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>2. 산출 세액</h2>
+          <div class="sum-box" role="status" aria-live="polite">
+            <div>
+              <div class="label">총 합계 세액</div>
+              <div class="value" id="h_sum_total">-</div>
+            </div>
+            <div>
+              <div class="label">납부 안내</div>
+              <div class="value note nowrap" id="h_sum_guide">취득(잔금지급일)일로부터 60일 내</div>
+            </div>
+          </div>
+          <table class="table">
+            <thead><tr><th>세목</th><th>세율</th><th>세액</th></tr></thead>
+            <tbody id="h_rows"><tr><td colspan="3" style="text-align:center;color:#6b7280">입력 후 ‘계산하기’를 눌러주세요.</td></tr></tbody>
+            <tfoot><tr><th>합계 세액</th><th id="h_sum_rate">-</th><th id="h_sumY">-</th></tr></tfoot>
+          </table>
+          <div class="warn">※ 실제 고지서는 감면·중과, 절사 방식 등으로 차이가 있을 수 있으니 최종 고지서를 확인하세요.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -590,6 +686,107 @@ document.addEventListener('input',e=>{
 </script>
 
 <script>
+/* ===== (1) 주택 매매 취득 — 세율 소수점 둘째자리까지 반영 ===== */
+/* 6~9억 구간: 퍼센트(%) 값 기준으로 소수 셋째에서 반올림 → 둘째자리 유지 */
+function h_ratePercent_2dp(price){
+  if(price <= 600_000_000) return 1.00;     // %
+  if(price <= 900_000_000){
+    const rawPercent = (price * 2 / 300_000_000) - 3; // % 값
+    return Math.round(rawPercent * 100) / 100;        // 둘째자리까지
+  }
+  return 3.00; // %
+}
+function h_rateDecimal_fromPercent(pct){ return pct / 100; }
+
+function calc1(){
+  const price = numOf('h_price');
+  const type  = $('h_type')?.value || 'normal1';    // normal1 | adj2 | adj3
+  const over  = (($('h_area')?.value || 'under') === 'over'); // 전용 85㎡ 초과 여부
+  if(!(price > 0)){ alert('취득가액을 입력해주세요.'); return; }
+
+  let acq=0, edu=0, rns=0;     // 금액(원)
+  let rows=[];
+
+  if(type === 'normal1'){
+    // ── 일반과세 주택 ───────────────────────────────
+    const pct = h_ratePercent_2dp(price);           // % (둘째자리)
+    const r_tax = h_rateDecimal_fromPercent(pct);   // 소수율
+    acq = floor10(Math.floor(price * r_tax));       // 취득세
+
+    // 농어촌특별세: 전용면적 85㎡ 초과 시 0.2%, 아니면 미부과
+    rns = over ? floor10(Math.floor(price * 0.002)) : 0;
+
+    // 지방교육세: 본세(취득세액)의 10%
+    edu = floor10(Math.floor(acq * 0.10));
+
+    const pctText = pct.toFixed(2) + '%';
+    rows = [
+      ['취득세', pctText, fmt(acq)],
+      ['지방교육세', '본세의 10%', fmt(edu)],
+      ['농어촌특별세', over ? '0.2%' : '미부과', fmt(rns)]
+    ];
+
+    setText('h_rate_acq', pctText);
+    setText('h_rate_nts', over ? '0.2%' : '미부과');
+    setText('h_rate_edu', '본세의 10%');
+
+  }else if(type === 'adj2'){
+    // ── 조정대상지역 2주택 중과 ─────────────────────────
+    acq = floor10(Math.floor(price * 0.08));        // 8%
+    edu = floor10(Math.floor(price * 0.004));       // 0.4% (취득가액×0.4%)
+    rns = over ? floor10(Math.floor(price * 0.006)) : 0; // 85㎡ 초과 0.6%, 이하는 미부과
+
+    rows = [
+      ['취득세', '8%', fmt(acq)],
+      ['지방교육세', '0.4%', fmt(edu)],
+      ['농어촌특별세', over ? '0.6%' : '미부과', fmt(rns)]
+    ];
+
+    setText('h_rate_acq','8%');
+    setText('h_rate_nts', over ? '0.6%' : '미부과');
+    setText('h_rate_edu','0.4%');
+
+  }else if(type === 'adj3'){
+    // ── 조정대상지역 3주택 이상 중과 ────────────────────
+    acq = floor10(Math.floor(price * 0.12));        // 12%
+    edu = floor10(Math.floor(price * 0.004));       // 0.4% (취득가액×0.4%)
+    rns = over ? floor10(Math.floor(price * 0.010)) : 0; // 85㎡ 초과 1.0%, 이하는 미부과
+
+    rows = [
+      ['취득세', '12%', fmt(acq)],
+      ['지방교육세', '0.4%', fmt(edu)],
+      ['농어촌특별세', over ? '1.0%' : '미부과', fmt(rns)]
+    ];
+
+    setText('h_rate_acq','12%');
+    setText('h_rate_nts', over ? '1.0%' : '미부과');
+    setText('h_rate_edu','0.4%');
+  }
+
+  // 표/합계 반영
+  const sum = acq + edu + rns;
+  setHTML('h_rows', rows.map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join(''));
+  setText('h_sumY', fmt(sum));
+  setText('h_sum_total', fmt(sum));
+  setText('h_sum_rate', ((sum/price)*100).toFixed(2).replace(/\.?0+$/,'') + '%');
+
+  // 디테일 표 공통
+  setText('h_base', fmt(price));
+
+  // 납부 기한/안내
+  setText('h_sum_guide', '취득(잔금지급일)일로부터 60일 내');
+  const ds = $('h_date')?.value || ''; let deadline='-';
+  if(ds){ const d = parseLocalDate(ds); if(d){ deadline = formatYMD(addDays(d,60)); } }
+  setText('h_deadline', deadline);
+}
+
+// 옵션/날짜 변경 시 자동 갱신
+document.addEventListener('change', e=>{
+  if(['h_type','h_area','h_date'].includes(e.target?.id)) calc1();
+});
+</script>
+
+<script>
 /* ===== (2) 상가 등 유상취득 ===== */
 const ACQ_RATE=0.04, NTS_RATE=0.002, EDU_RATE=0.004;
 function calc2(){
@@ -713,11 +910,11 @@ function calc4(){
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
-  /* 날짜 변경 시 자동 계산 금지: 아래 줄 제거됨 */
+  /* 날짜 변경 시 자동 계산 금지: 아래 줄 유지하지 않음 */
   // if(id==='증여일') calc4();
-  if(id==='g_isHouse' || id==='g_isNonHouse'){ g_enforceTypeExclusive(id); g_refreshAreaOptions(); /* 자동 계산 제거 원하면 calc4() 호출 안 함 */ }
-  if(id==='g_area_le_85'){ if(e.target.checked) g_toggleArea('g_area_le_85'); /* calc4(); 제거 */ }
-  if(id==='g_area_gt_85'){ if(e.target.checked) g_toggleArea('g_area_gt_85'); /* calc4(); 제거 */ }
+  if(id==='g_isHouse' || id==='g_isNonHouse'){ g_enforceTypeExclusive(id); g_refreshAreaOptions(); /* 자동 계산 원치 않으면 calc4() 호출 생략 */ }
+  if(id==='g_area_le_85'){ if(e.target.checked) g_toggleArea('g_area_le_85'); /* calc4(); 생략 */ }
+  if(id==='g_area_gt_85'){ if(e.target.checked) g_toggleArea('g_area_gt_85'); /* calc4(); 생략 */ }
 });
 document.addEventListener('DOMContentLoaded', ()=>{ g_refreshAreaOptions(); });
 </script>
@@ -746,7 +943,7 @@ async function openInstall(){
     if(isStandalone()){ setInstallButtonsVisible(false); return; }
     if(deferredPrompt){ deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice.catch(()=>null); deferredPrompt=null; if(!choice || choice.outcome!=='accepted'){ updateInstallUI(); } return; }
     if(isiOS && isSafari){ alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.'); }
-    else{ alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요."); }
+    else{ alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요.'); }
   }catch(e){ console.error(e); }
 }
 ['load','pageshow','visibilitychange'].forEach(evt=>{ window.addEventListener(evt, updateInstallUI); });
@@ -760,7 +957,7 @@ function getActiveView(){
   return v || document.getElementById('view-menu');
 }
 function openOnePagePreview(){
-  try{ calc2(); }catch(e){} try{ calc3(); }catch(e){} try{ calc4(); }catch(e){}
+  try{ calc1(); }catch(e){} try{ calc2(); }catch(e){} try{ calc3(); }catch(e){} try{ calc4(); }catch(e){}
   const overlay = $('previewOverlay'), page = $('previewPage'), content = $('previewContent');
   if(!overlay||!page||!content) return;
   const active = getActiveView(); const clone = active.cloneNode(true); clone.setAttribute('data-preview','1');
@@ -781,3 +978,4 @@ window.addEventListener('resize', fitPreviewScale);
 </script>
 </body>
 </html>
+.
