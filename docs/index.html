@@ -1011,6 +1011,69 @@ function fitPreviewScale(){
 }
 window.addEventListener('resize', fitPreviewScale);
 </script>
+  <script>
+/* ===== 폼 상태 자동 저장/복원 ===== */
+/* 저장 대상 요소 id 목록 */
+const FORM_KEYS = [
+  // calc1
+  'h_price','h_date','h_type','h_area',
+  // calc2
+  '취득가액','잔금지급일',
+  // calc3
+  'isHouse','isNonHouse','area_le_85','area_gt_85','one_home_special','상속_과세표준','사망일',
+  // calc4
+  'g_isHouse','g_isNonHouse','g_area_le_85','g_area_gt_85','증여_과세표준','증여일'
+];
+
+/* 저장 */
+function saveFormState(){
+  try{
+    const data = {};
+    FORM_KEYS.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      data[id] = (el.type === 'checkbox') ? !!el.checked : (el.value ?? '');
+    });
+    localStorage.setItem('acqtax_state_v1', JSON.stringify(data));
+  }catch(e){}
+}
+
+/* 복원 */
+function loadFormState(){
+  try{
+    const raw = localStorage.getItem('acqtax_state_v1');
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(data).forEach(([id,val])=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(el.type === 'checkbox'){ el.checked = !!val; }
+      else{ el.value = val; }
+    });
+
+    /* 의존 UI/계산 갱신 (있으면 호출) */
+    try{ refreshAreaOptions(); }catch(e){}
+    try{ g_refreshAreaOptions(); }catch(e){}
+    try{ if(typeof calc1==='function') calc1(); }catch(e){}
+    try{ if(typeof calc2==='function') calc2(); }catch(e){}
+    try{ if(typeof calc3==='function') calc3(); }catch(e){}
+    try{ if(typeof calc4==='function') calc4(); }catch(e){}
+  }catch(e){}
+}
+
+/* 입력/변경 시 자동 저장 */
+document.addEventListener('input', (e)=>{
+  if(!e.target) return;
+  if(FORM_KEYS.includes(e.target.id)) saveFormState();
+});
+document.addEventListener('change', (e)=>{
+  if(!e.target) return;
+  if(FORM_KEYS.includes(e.target.id)) saveFormState();
+});
+
+/* 초기 복원 */
+window.addEventListener('DOMContentLoaded', loadFormState);
+</script>
 </body>
 </html>
 .
