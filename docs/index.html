@@ -159,27 +159,16 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .quick-sum .value{ font-size:1.08rem }
 
 /* ====== ▶ 요청 반영: calc1 전용 스타일 ====== */
-/* 1) 첫 번째 카드의 제목만 가운데 정렬 */
 #view-calc1 .grid > .card:first-child .header-row h2{ text-align:center; width:100%; }
-/* 2) 전용면적 셀렉트 박스 가로 확대 */
 #view-calc1 #h_area.sel{ width:98%; }
-/* 3) '납부 안내' 글자 크기 2단계 축소 */
 #view-calc1 #h_sum_guide{ font-size:0.8rem !important; }
-/* 4) 요청: 4개 소제목(라벨) 가운데 정렬 + 글자색 검정 */
 #view-calc1 .input-grid .col-amount label,
-#view-calc1 .input-grid .col-date label{
-  text-align:center; color:#000;
-}
-/* 5) 요청: 잔금지급일의 날짜 숫자 굵게 + 검정 */
-#view-calc1 #h_date{
-  font-weight:800; color:#000;
-}
+#view-calc1 .input-grid .col-date label{ text-align:center; color:#000; }
+#view-calc1 #h_date{ font-weight:800; color:#000; }
 
 /* ====== ▶ 추가 요청 반영: calc2 라벨 가운데 정렬 ====== */
 #view-calc2 .input-grid .col-amount label,
-#view-calc2 .input-grid .col-date label{
-  text-align:center;
-}
+#view-calc2 .input-grid .col-date label{ text-align:center; }
 
 /* 인쇄 최적화 */
 @media print{
@@ -544,7 +533,8 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
             <div>
               <div class="label">납부 안내</div>
-              <div class="value note nowrap" id="상속_sum_guide">사망일(상속개시일)로부터 6개월 내</div>
+              <!-- ▼ 기본 문구 변경 -->
+              <div class="value note nowrap" id="상속_sum_guide">사망일(상속개시일이 속하는 달의 말일부터) 6개월 내</div>
             </div>
           </div>
           <table class="table">
@@ -722,7 +712,6 @@ document.addEventListener('input',e=>{
 
 <script>
 /* ===== (1) 주택 매매 취득 — 세율 소수점 둘째자리까지 반영 ===== */
-/* 6~9억 구간: 퍼센트(%) 값 기준으로 소수 셋째에서 반올림 → 둘째자리 유지 */
 function h_ratePercent_2dp(price){
   if(price <= 600_000_000) return 1.00;     // %
   if(price <= 900_000_000){
@@ -735,87 +724,68 @@ function h_rateDecimal_fromPercent(pct){ return pct / 100; }
 
 function calc1(){
   const price = numOf('h_price');
-  const type  = $('h_type')?.value || 'normal1';    // normal1 | adj2 | adj3
-  const over  = (($('h_area')?.value || 'under') === 'over'); // 전용 85㎡ 초과 여부
+  const type  = $('h_type')?.value || 'normal1';
+  const over  = (($('h_area')?.value || 'under') === 'over');
   if(!(price > 0)){ alert('취득가액을 입력해주세요.'); return; }
 
-  let acq=0, edu=0, rns=0;     // 금액(원)
-  let rows=[];
+  let acq=0, edu=0, rns=0; let rows=[];
 
   if(type === 'normal1'){
-    // ── 일반과세 주택 ───────────────────────────────
-    const pct = h_ratePercent_2dp(price);           // % (둘째자리)
-    const r_tax = h_rateDecimal_fromPercent(pct);   // 소수율
-    acq = floor10(Math.floor(price * r_tax));       // 취득세
-
-    // 농어촌특별세: 전용면적 85㎡ 초과 시 0.2%, 아니면 미부과
+    const pct = h_ratePercent_2dp(price);
+    const r_tax = h_rateDecimal_fromPercent(pct);
+    acq = floor10(Math.floor(price * r_tax));
     rns = over ? floor10(Math.floor(price * 0.002)) : 0;
-
-    // 지방교육세: 본세(취득세액)의 10%
     edu = floor10(Math.floor(acq * 0.10));
-
     const pctText = pct.toFixed(2) + '%';
     rows = [
       ['취득세', pctText, fmt(acq)],
       ['지방교육세', '본세의 10%', fmt(edu)],
       ['농어촌특별세', over ? '0.2%' : '미부과', fmt(rns)]
     ];
-
     setText('h_rate_acq', pctText);
     setText('h_rate_nts', over ? '0.2%' : '미부과');
     setText('h_rate_edu', '본세의 10%');
 
   }else if(type === 'adj2'){
-    // ── 조정대상지역 2주택 중과 ─────────────────────────
-    acq = floor10(Math.floor(price * 0.08));        // 8%
-    edu = floor10(Math.floor(price * 0.004));       // 0.4% (취득가액×0.4%)
-    rns = over ? floor10(Math.floor(price * 0.006)) : 0; // 85㎡ 초과 0.6%, 이하는 미부과
-
+    acq = floor10(Math.floor(price * 0.08));
+    edu = floor10(Math.floor(price * 0.004));
+    rns = over ? floor10(Math.floor(price * 0.006)) : 0;
     rows = [
       ['취득세', '8%', fmt(acq)],
       ['지방교육세', '0.4%', fmt(edu)],
       ['농어촌특별세', over ? '0.6%' : '미부과', fmt(rns)]
     ];
-
     setText('h_rate_acq','8%');
     setText('h_rate_nts', over ? '0.6%' : '미부과');
     setText('h_rate_edu','0.4%');
 
   }else if(type === 'adj3'){
-    // ── 조정대상지역 3주택 이상 중과 ────────────────────
-    acq = floor10(Math.floor(price * 0.12));        // 12%
-    edu = floor10(Math.floor(price * 0.004));       // 0.4% (취득가액×0.4%)
-    rns = over ? floor10(Math.floor(price * 0.010)) : 0; // 85㎡ 초과 1.0%, 이하는 미부과
-
+    acq = floor10(Math.floor(price * 0.12));
+    edu = floor10(Math.floor(price * 0.004));
+    rns = over ? floor10(Math.floor(price * 0.010)) : 0;
     rows = [
       ['취득세', '12%', fmt(acq)],
       ['지방교육세', '0.4%', fmt(edu)],
       ['농어촌특별세', over ? '1.0%' : '미부과', fmt(rns)]
     ];
-
     setText('h_rate_acq','12%');
     setText('h_rate_nts', over ? '1.0%' : '미부과');
     setText('h_rate_edu','0.4%');
   }
 
-  // 표/합계 반영
   const sum = acq + edu + rns;
   setHTML('h_rows', rows.map(([n,r,a])=>`<tr><td>${n}</td><td>${r}</td><td>${a}</td></tr>`).join(''));
   setText('h_sumY', fmt(sum));
   setText('h_sum_total', fmt(sum));
   setText('h_sum_rate', ((sum/price)*100).toFixed(2).replace(/\.?0+$/,'') + '%');
-
-  // 디테일 표 공통
   setText('h_base', fmt(price));
 
-  // 납부 기한/안내
   setText('h_sum_guide', '취득(잔금지급일)일로부터 60일 내');
   const ds = $('h_date')?.value || ''; let deadline='-';
   if(ds){ const d = parseLocalDate(ds); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('h_deadline', deadline);
 }
 
-// 옵션/날짜 변경 시 자동 갱신
 document.addEventListener('change', e=>{
   if(['h_type','h_area','h_date'].includes(e.target?.id)) calc1();
 });
@@ -878,8 +848,20 @@ function calc3(){
   setHTML('상속_tb',rows); setText('상속_sumY',fmt(sum)); setText('상속_sum_total',fmt(sum)); setText('상속_과표',fmt(base));
   setText('상속_농특세율셀', ntsRateLabel); setText('상속_취득세율셀', (acqRate*100).toFixed(1)+'%');
   setText('상속_합계세율표시', ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%');
-  setText('상속_sum_guide','사망일(상속개시일)로부터 6개월 내');
-  const deathStr=$('사망일')?.value || ''; let deadline='-'; if(deathStr){ const d=parseLocalDate(deathStr); if(d){ deadline = formatYMD(addMonths(d,6)); } } setText('상속_납부기한', deadline);
+
+  // ▼ 납부 안내 문구 및 납부기한 계산 수정
+  setText('상속_sum_guide','사망일(상속개시일이 속하는 달의 말일부터) 6개월 내');
+  const deathStr=$('사망일')?.value || '';
+  let deadline='-';
+  if(deathStr){
+    const d=parseLocalDate(deathStr);
+    if(d){
+      const endOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0); // 사망월 말일
+      const sixMonthsAfterEOM = addMonths(endOfMonth, 6);               // 말일부터 6개월 후
+      deadline = formatYMD(sixMonthsAfterEOM);
+    }
+  }
+  setText('상속_납부기한', deadline);
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
@@ -1013,7 +995,6 @@ window.addEventListener('resize', fitPreviewScale);
 </script>
   <script>
 /* ===== 폼 상태 자동 저장/복원 ===== */
-/* 저장 대상 요소 id 목록 */
 const FORM_KEYS = [
   // calc1
   'h_price','h_date','h_type','h_area',
@@ -1025,7 +1006,6 @@ const FORM_KEYS = [
   'g_isHouse','g_isNonHouse','g_area_le_85','g_area_gt_85','증여_과세표준','증여일'
 ];
 
-/* 저장 */
 function saveFormState(){
   try{
     const data = {};
@@ -1038,7 +1018,6 @@ function saveFormState(){
   }catch(e){}
 }
 
-/* 복원 */
 function loadFormState(){
   try{
     const raw = localStorage.getItem('acqtax_state_v1');
@@ -1051,7 +1030,6 @@ function loadFormState(){
       else{ el.value = val; }
     });
 
-    /* 의존 UI/계산 갱신 (있으면 호출) */
     try{ refreshAreaOptions(); }catch(e){}
     try{ g_refreshAreaOptions(); }catch(e){}
     try{ if(typeof calc1==='function') calc1(); }catch(e){}
@@ -1061,7 +1039,6 @@ function loadFormState(){
   }catch(e){}
 }
 
-/* 입력/변경 시 자동 저장 */
 document.addEventListener('input', (e)=>{
   if(!e.target) return;
   if(FORM_KEYS.includes(e.target.id)) saveFormState();
@@ -1071,7 +1048,6 @@ document.addEventListener('change', (e)=>{
   if(FORM_KEYS.includes(e.target.id)) saveFormState();
 });
 
-/* 초기 복원 */
 window.addEventListener('DOMContentLoaded', loadFormState);
 </script>
 </body>
