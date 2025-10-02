@@ -850,7 +850,7 @@ function calc3(){
   setText('상속_합계세율표시', ((acqRate + ntsRate + I_EDU_RATE)*100).toFixed(2) + '%');
 
   // ▼ 납부 안내 문구 및 납부기한 계산 수정
-  setText('상속_sum_guide','사망일(상속개시일이 속하는 달의 말일부터) 6개월 내');
+  setText('상속_sum_guide','상속개시일(사망일)이 속하는 달의 말일부터 6개월 내');
   const deathStr=$('사망일')?.value || '';
   let deadline='-';
   if(deathStr){
