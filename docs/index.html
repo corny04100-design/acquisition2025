@@ -155,9 +155,9 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 .btn-row .quarter-gap{ flex:0 0 25%; } /* 가운데 정확히 25% 비움 */
 
 /* 증여 view: 버튼 밑 간이 합계 표시 (공통 사용) */
-.quick-sum{ display:none; margin:10px 0 0 0; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
-.quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem }
-.quick-sum .value{ font-size:1.08rem }
+.quick-sum{ display:inline-flex; align-items:center; gap:8px; margin:10px 0 0 0; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
+.quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem; line-height:1 }
+.quick-sum .value{ font-size:1.08rem; line-height:1 }
 
 /* ====== ▶ 요청 반영: calc1 전용 스타일 ====== */
 #view-calc1 .grid > .card:first-child .header-row h2{ text-align:center; width:100%; }
