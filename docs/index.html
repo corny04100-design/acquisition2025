@@ -641,7 +641,7 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
             <div>
               <div class="label">납부 안내</div>
-              <div class="value note nowrap" id="증여_sum_guide">취득(증여일)로부터 60일 내</div>
+              <div class="value note nowrap" id="증여_sum_guide">취득일(증여일)로부터 60일 내</div>
             </div>
           </div>
           <table class="table">
@@ -923,7 +923,7 @@ function calc4(){
   setText('증여_합계세율표시', ((G_ACQ_RATE + ntsRate + G_EDU_RATE)*100).toFixed(2) + '%');
 
   // 납부기한/안내
-  setText('증여_sum_guide','취득(증여일)로부터 60일 내');
+  setText('증여_sum_guide','취득일(증여일)로부터 60일 내');
   const giftDateStr = $('증여일')?.value || ''; let deadline='-';
   if(giftDateStr){ const d=parseLocalDate(giftDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('증여_납부기한', deadline);
