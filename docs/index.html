@@ -150,11 +150,11 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
 #view-calc4 details summary{ font-weight:900 }
 #view-calc4 details .table td,#view-calc4 details .table th{ font-weight:800 }
 
-/* ===== 증여: 버튼/간이합계 25% 간격 ===== */
-#view-calc4 .btn-row{ display:flex; align-items:center; gap:10px; width:100%; }
-#view-calc4 .btn-row .quarter-gap{ flex:0 0 25%; } /* 가운데 정확히 25% 비움 */
+/* ===== 버튼/간이합계 25% 간격 (calc1~4 공통) ===== */
+#view-calc1 .btn-row, #view-calc2 .btn-row, #view-calc3 .btn-row, #view-calc4 .btn-row{ display:flex; align-items:center; gap:10px; width:100%; }
+.btn-row .quarter-gap{ flex:0 0 25%; } /* 가운데 정확히 25% 비움 */
 
-/* 증여 view: 버튼 밑 간이 합계 표시 */
+/* 증여 view: 버튼 밑 간이 합계 표시 (공통 사용) */
 .quick-sum{ display:none; margin:10px 0 0 0; padding:10px 12px; border:1px solid #bfdbfe; background:var(--brand-weak); border-radius:10px; width:fit-content; font-weight:800 }
 .quick-sum .label{ margin-right:8px; color:#0f172a; font-size:.95rem }
 .quick-sum .value{ font-size:1.08rem }
@@ -347,7 +347,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
             </div>
           </div>
 
-          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc1()">✍️ 계산하기</button></div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="calc1()">✍️ 계산하기</button>
+            <div class="quarter-gap" aria-hidden="true"></div>
+            <div id="h_quick_sum" class="quick-sum" role="status" aria-live="polite">
+              <span class="label">총 합계 세액</span><span id="h_quick_sum_value" class="value">-</span>
+            </div>
+          </div>
 
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
@@ -420,7 +426,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <input id="잔금지급일" type="date" class="date" />
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc2()">✍️ 계산하기</button></div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="calc2()">✍️ 계산하기</button>
+            <div class="quarter-gap" aria-hidden="true"></div>
+            <div id="상가_quick_sum" class="quick-sum" role="status" aria-live="polite">
+              <span class="label">총 합계 세액</span><span id="상가_quick_sum_value" class="value">-</span>
+            </div>
+          </div>
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
             <table class="table nowrap">
@@ -514,7 +526,13 @@ tfoot tr{background:var(--sum-bg);font-weight:700}
               <input id="사망일" type="date" class="date" />
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center"><button class="btn" onclick="calc3()">✍️ 계산하기</button></div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="calc3()">✍️ 계산하기</button>
+            <div class="quarter-gap" aria-hidden="true"></div>
+            <div id="상속_quick_sum" class="quick-sum" role="status" aria-live="polite">
+              <span class="label">총 합계 세액</span><span id="상속_quick_sum_value" class="value">-</span>
+            </div>
+          </div>
           <details class="center-30" style="margin-top:16px" open>
             <summary>세율 및 과세표준</summary>
             <table class="table nowrap">
@@ -791,6 +809,10 @@ function calc1(){
   const ds = $('h_date')?.value || ''; let deadline='-';
   if(ds){ const d = parseLocalDate(ds); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('h_deadline', deadline);
+
+  // 버튼 옆 간이 합계 표시
+  const quick=$('h_quick_sum'), quickV=$('h_quick_sum_value');
+  if(quick && quickV){ quick.style.display='inline-flex'; quickV.textContent = fmt(sum); }
 }
 
 document.addEventListener('change', e=>{
@@ -811,6 +833,10 @@ function calc2(){
   const payDateStr = $('잔금지급일')?.value || ''; let deadline='-';
   if(payDateStr){ const d=parseLocalDate(payDateStr); if(d){ deadline = formatYMD(addDays(d,60)); } }
   setText('납부기한', deadline);
+
+  // 버튼 옆 간이 합계 표시
+  const quick=$('상가_quick_sum'), quickV=$('상가_quick_sum_value');
+  if(quick && quickV){ quick.style.display='inline-flex'; quickV.textContent = fmt(sum); }
 }
 document.addEventListener('change',e=>{ if(e.target && (e.target.id==='잔금지급일')) calc2(); });
 </script>
@@ -869,6 +895,10 @@ function calc3(){
     }
   }
   setText('상속_납부기한', deadline);
+
+  // 버튼 옆 간이 합계 표시
+  const quick=$('상속_quick_sum'), quickV=$('상속_quick_sum_value');
+  if(quick && quickV){ quick.style.display='inline-flex'; quickV.textContent = fmt(sum); }
 }
 document.addEventListener('change',e=>{
   const id = e.target?.id || '';
