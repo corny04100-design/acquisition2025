@@ -975,12 +975,16 @@ function calc4(){
   setText('증여_농특세율셀', ntsRateLabel);
   setText('증여_합계세율표시', ((G_ACQ_RATE + ntsRate + G_EDU_RATE)*100).toFixed(2) + '%');
 
-  // 납부기한/안내 (증여일로부터 3개월)
-setText('증여_sum_guide','취득일(증여일)로부터 3개월 내');
+// 납부기한/안내 (증여월 말일로부터 3개월)
+setText('증여_sum_guide','증여일(취득일)이 속하는 달의 말일로부터 3개월 내');
 const giftDateStr = $('증여일')?.value || ''; let deadline='-';
 if(giftDateStr){
   const d = parseLocalDate(giftDateStr);
-  if(d){ deadline = formatYMD(addMonths(d, 3)); }
+  if(d){
+    const endOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0); // 증여월 말일
+    const threeMonthsAfterEOM = addMonths(endOfMonth, 3);              // 말일부터 3개월 후
+    deadline = formatYMD(threeMonthsAfterEOM);
+  }
 }
 setText('증여_납부기한', deadline);
 
