@@ -1012,8 +1012,9 @@ document.addEventListener('DOMContentLoaded', ()=>{ g_refreshAreaOptions(); });
 </script>
 
 <script>
-/* ===== PWA 설치 ===== */
-let deferredPrompt=null;
+/* ===== PWA 설치(크롬 최신 대응) ===== */
+let deferredPrompt = null;
+
 function isStandalone(){
   try{
     return window.matchMedia('(display-mode: standalone)').matches
@@ -1021,25 +1022,89 @@ function isStandalone(){
       || window.navigator.standalone === true;
   }catch(e){ return false; }
 }
+
 function setInstallButtonsVisible(visible){
-  document.querySelectorAll('.btn-install').forEach(el=>{ el.style.display = visible ? '' : 'none'; });
+  document.querySelectorAll('.btn-install').forEach(el=>{
+    el.style.display = visible ? '' : 'none';
+  });
   document.body.classList.toggle('installed', !visible);
 }
-function updateInstallUI(){ const installed = isStandalone(); setInstallButtonsVisible(!installed); }
-const isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; updateInstallUI(); });
-window.addEventListener('appinstalled', ()=>{ deferredPrompt=null; setInstallButtonsVisible(false); setTimeout(()=>{ try{ location.reload(); }catch(e){} }, 300); });
+
+/* 버튼 표시 정책:
+   - 앱이 이미 설치/독립모드면 숨김
+   - 그 외엔 기본적으로 표시(설치 가능 이벤트가 안 와도 사용자에게 메뉴 설치 경로를 안내) */
+function updateInstallUI(){
+  const installed = isStandalone();
+  setInstallButtonsVisible(!installed);
+}
+
+/* 최신 크롬: beforeinstallprompt는 여전히 발생하지만 userChoice가 없을 수 있음 */
+window.addEventListener('beforeinstallprompt', (e)=>{
+  try{
+    e.preventDefault();        // 커스텀 버튼을 쓰기 위함
+    deferredPrompt = e;        // 이벤트 저장
+    updateInstallUI();         // 설치 버튼 노출
+  }catch(_){}
+});
+
+/* 설치 완료 시 UI 정리 */
+window.addEventListener('appinstalled', ()=>{
+  deferredPrompt = null;
+  setInstallButtonsVisible(false);
+  setTimeout(()=>{ try{ location.reload(); }catch(_){ } }, 300);
+});
+
+const isiOS   = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+const isSafari= /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 async function openInstall(){
   try{
     if(isStandalone()){ setInstallButtonsVisible(false); return; }
-    if(deferredPrompt){ deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice.catch(()=>null); deferredPrompt=null; if(!choice || choice.outcome!=='accepted'){ updateInstallUI(); } return; }
-    if(isiOS && isSafari){ alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.'); }
-    else{ alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘을 눌러 설치하세요.'); }
-  }catch(e){ console.error(e); }
+
+    if(deferredPrompt){
+      // 이벤트 보관분을 즉시 비워 중복 프롬프트 방지
+      const promptEvent = deferredPrompt;
+      deferredPrompt = null;
+
+      // 사용자 제스처 내에서 호출
+      await promptEvent.prompt();
+
+      /* 구형/일부 환경: userChoice가 존재.
+         최신 크롬: userChoice가 없을 수 있음 → 기능검사 후 처리 */
+      let outcome = 'unknown';
+      try{
+        if (promptEvent.userChoice) {
+          const res = await promptEvent.userChoice;
+          outcome = res?.outcome || 'unknown';
+        }
+      }catch(_){}
+
+      if (outcome !== 'accepted') {
+        // 사용자가 취소했거나 outcome을 알 수 없는 경우 버튼 유지
+        updateInstallUI();
+      }
+      return;
+    }
+
+    // beforeinstallprompt가 발생하지 않은 브라우저/상황(설치 불가 또는 iOS 등)
+    if(isiOS && isSafari){
+      alert('iOS 사파리: 공유(⬆️) 버튼 → "홈 화면에 추가"를 눌러 설치하세요.');
+    }else{
+      alert('브라우저 메뉴에서 "앱 설치" 또는 주소창 우측 설치 아이콘으로 설치할 수 있어요.');
+    }
+  }catch(e){
+    console.error(e);
+    updateInstallUI();
+  }
 }
-['load','pageshow','visibilitychange'].forEach(evt=>{ window.addEventListener(evt, updateInstallUI); });
-try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', updateInstallUI); }catch(e){}
+
+/* 상태 변화에 맞춰 버튼 표시 갱신 */
+['load','pageshow','visibilitychange'].forEach(evt=>{
+  window.addEventListener(evt, updateInstallUI);
+});
+try{
+  window.matchMedia('(display-mode: standalone)').addEventListener('change', updateInstallUI);
+}catch(_){}
 </script>
 
 <script>
