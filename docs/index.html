@@ -1190,6 +1190,40 @@ document.addEventListener('change', (e)=>{
 
 window.addEventListener('DOMContentLoaded', loadFormState);
 </script>
+  <!-- …기존 스크립트들… -->
+
+<!-- ▼ PWA Service Worker 등록 (설치요건 충족) -->
+<script>
+(function(){
+  if (!('serviceWorker' in navigator)) return;
+  const SW_URL = './sw.js';
+  const SCOPE  = './';
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register(SW_URL, { scope: SCOPE });
+      if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            reg.waiting && reg.waiting.postMessage('SKIP_WAITING');
+          }
+        });
+      });
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!window.__swReloaded) { window.__swReloaded = true; location.reload(); }
+      });
+    } catch (e) {
+      console.error('SW registration failed:', e);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
+
 </body>
 </html>
 .
